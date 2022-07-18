@@ -2,7 +2,7 @@ module "backup" {
   source                         = "cloudposse/backup/aws"
   version                        = "0.12.0"
   stage                          = terraform.workspace
-  name                           = var.environment[terraform.workspace]
+  name                           = var.name
   backup_resources               = [aws_db_instance.postgres.arn]
   not_resources                  = []
   schedule                       = "cron(0 5 * * ? *)"
