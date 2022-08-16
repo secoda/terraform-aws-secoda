@@ -105,8 +105,8 @@ variable "keycloak_admin_password" {
 # Load Balancers
 ################################################################################
 
-# This may be modified. Note that if it is set to false, you will only be able to access the load balancer from within the AWS VPC subnet network.
-variable "public_access" {
+# This may be modified. Note that if it is set to true, you will only be able to access the load balancer from within the AWS VPC subnet network.
+variable "internal" {
   type    = bool
   default = false
 }

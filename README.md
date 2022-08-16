@@ -1,10 +1,10 @@
-### NOTE: If you have previously applied an earlier version of our terraform:
+### NOTE: If you have previously applied a version of our terraform from a private repository:
 
-Before pulling the latest changes and running terraform, always take a backup of your data and confirm it is viable.
-
-This public branch contains _breaking changes_ if you have a previous deployment with our private repository. The latest version of Secoda **only** uses Postgres. These changes **will delete** your neo4j instance. Please consult with us before deploying. You must also run this command before applying new tf infrastructure: `terraform state mv 'module.vpc' 'module.vpc[0]'`
+This *public* respository contains _breaking changes_ from our legacy *private* repositories. The latest version of Secoda **only** uses Postgres. These changes **will irreversibly delete** your neo4j instance. Please consult with us before deploying. You must also run this command before applying new tf infrastructure: `terraform state mv 'module.vpc' 'module.vpc[0]'`
 
 # Secoda On-Premise (AWS, Terraform)
+
+Reminder: before pulling the latest changes and running terraform, always take a backup of your data and confirm it is viable.
 
 This deployment option uses **ECS Fargate**, RDS Postgres, Elasticcache Redis, and AWS Elasticsearch. These files will create a secure, separate VPC that will run Secoda on ECS (via Fargate).
 

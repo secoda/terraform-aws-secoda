@@ -27,9 +27,10 @@ module "ecs" {
     aws_db_instance.postgres, # Must wait for database to spin up to run migrations.
   ]
 
-  name = var.name
+  name     = var.name
+  internal = var.internal # Whether this instance should have a load balancer that resolves to a private ip address.
 
-  ecs_exec_enable = true # Feel free to disable this. Used for debugging errors.
+  ecs_exec_enable = true # Used for debugging errors.
 
   ssm_docker = module.secrets-manager.secret_arns.docker
 

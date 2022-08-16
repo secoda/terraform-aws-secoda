@@ -22,6 +22,9 @@ docker_password = "********"
 # You may enable a custom domain with a valid certificate for the terminating TLS on the application load balancer.
 # certificate_arn = "<VALID_CERTIFICATE_ARN_FOR_BASE_DOMAIN>" # If you would like to use a custom certificate, set and fill with the proper arn.
 
+# If this is set to true, you will only be able to access the load balancer from within the AWS VPC subnet network.
+# internal = false
+
 # If VPC is being overridden, you must set the VPC id and the subnet parameters below (all of these vars).
 # There must be at least 2 public subnets and 2 private subnets in the VPC.
 # vpc_id = "vpc-******"
