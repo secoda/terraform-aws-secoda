@@ -475,6 +475,10 @@ resource "aws_ecs_task_definition" "main" {
 
   requires_compatibilities = ["FARGATE"]
 
+  ephemeral_storage {
+    size_in_gib = 100
+  }
+
   cpu    = 2048
   memory = 8192
 
