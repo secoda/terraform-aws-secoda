@@ -12,7 +12,7 @@ If you have previously applied a version of our terraform from a private reposit
 
 Reminder: before pulling the latest changes and running terraform, always take a backup of your data and confirm it is viable.
 
-This deployment option uses **ECS Fargate**, RDS Postgres, Elasticcache Redis, and AWS Elasticsearch. These files will create a secure, separate VPC that will run Secoda on ECS (via Fargate).
+This deployment option uses **ECS Fargate**, RDS Postgres, and Elasticcache Redis. These files will create a secure, separate VPC that will run Secoda on ECS (via Fargate).
 
 ## Initial Steps
 
