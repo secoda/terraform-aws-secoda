@@ -1,4 +1,11 @@
-### NOTE: If you have previously applied a version of our terraform from a private repository:
+# Disclaimer
+
+### New customers
+
+Please contact us for your company-specific Docker token. Secoda on-premise is an enterprise product, and we are happy to provide you with a token if you contact us through Intercom or Slack.
+
+### Existing customers
+NOTE: If you have previously applied a version of our terraform from a private repository:
 
 This *public* respository contains _breaking changes_ from our legacy *private* repositories. The latest version of Secoda **only** uses Postgres. These changes **will irreversibly delete** your neo4j instance. Please consult with us before deploying. You must also run this command before applying new tf infrastructure: `terraform state mv 'module.vpc' 'module.vpc[0]'`
 
