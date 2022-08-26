@@ -82,15 +82,6 @@ data "aws_iam_policy_document" "cloudwatch_logs_allow_kms" {
   }
 }
 
-resource "aws_kms_key" "main" {
-  description         = "Key for ECS log encryption"
-  enable_key_rotation = true
-
-  policy = data.aws_iam_policy_document.cloudwatch_logs_allow_kms.json
-}
-
-
-
 ################################################################################
 # Alarms
 ################################################################################
@@ -223,8 +214,6 @@ resource "aws_security_group_rule" "app_lb_allow_all_https" {
 resource "aws_cloudwatch_log_group" "main" {
   name              = local.awslogs_group
   retention_in_days = var.logs_cloudwatch_retention
-
-  kms_key_id = aws_kms_key.main.arn
 }
 
 resource "aws_cloudwatch_metric_alarm" "alarm_cpu" {
