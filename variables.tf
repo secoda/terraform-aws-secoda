@@ -165,7 +165,7 @@ variable "services" {
 
   default = [
     {
-      tag         = "5.0.0"
+      tag         = "5.1.0"
       name        = "api"
       mem         = 6144
       cpu         = 1536
