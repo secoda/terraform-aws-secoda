@@ -540,6 +540,10 @@ resource "aws_ecs_task_definition" "main" {
               "value" : var.keycloak_secret_key == null ? random_uuid.keycloak_secret.result : var.keycloak_secret_key,
             },
             {
+              "name" : "KC_DB", # >= v18
+              "value" : "postgres",
+            },
+            {
               "name" : "KC_DB_PASSWORD", # >= v18
               "value" : var.keycloak_database_password,
             },
