@@ -26,6 +26,7 @@ resource "aws_db_instance" "postgres" {
   db_subnet_group_name     = var.database_subnet_group_name != null ? var.database_subnet_group_name : var.name
   vpc_security_group_ids   = [aws_security_group.keycloak-security-group.id]
   storage_encrypted        = true
+  auto_minor_version_upgrade= false # We recommend you do not upgrade the database version automatically, as it will put the database out-of-sync with the terraform.
 
   tags = {
     Name        = var.name
