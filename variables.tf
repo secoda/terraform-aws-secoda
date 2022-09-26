@@ -223,11 +223,6 @@ variable "services" {
       image     = false
 
       environment = [
-        # v18
-        {
-          "name" : "KC_DB", # >= v18
-          "value" : "postgres",
-        },
         {
           "name" : "KC_DB_USERNAME", # >= v18
           "value" : "keycloak",

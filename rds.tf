@@ -9,24 +9,24 @@ locals {
 # The analysis database must be initialized with init_db.sh before it will work with the analysis service
 
 resource "aws_db_instance" "postgres" {
-  max_allocated_storage    = 60
-  allocated_storage        = 12
-  engine                   = "postgres"
-  engine_version           = "13.7"
-  instance_class           = "db.t4g.small" # Adjust as needed. We suggest Graviton instances (t4g) for better price/performance.
-  identifier               = local.name
-  name                     = "keycloak"
-  username                 = "keycloak"
-  password                 = random_password.keycloak_database.result
-  skip_final_snapshot      = true
-  deletion_protection      = false
-  delete_automated_backups = false
-  backup_window            = "10:00-11:00"
-  backup_retention_period  = 21
-  db_subnet_group_name     = var.database_subnet_group_name != null ? var.database_subnet_group_name : var.name
-  vpc_security_group_ids   = [aws_security_group.keycloak-security-group.id]
-  storage_encrypted        = true
-  auto_minor_version_upgrade= false # We recommend you do not upgrade the database version automatically, as it will put the database out-of-sync with the terraform.
+  max_allocated_storage      = 60
+  allocated_storage          = 12
+  engine                     = "postgres"
+  engine_version             = "13.7"
+  instance_class             = "db.t4g.small" # Adjust as needed. We suggest Graviton instances (t4g) for better price/performance.
+  identifier                 = local.name
+  name                       = "keycloak"
+  username                   = "keycloak"
+  password                   = random_password.keycloak_database.result
+  skip_final_snapshot        = true
+  deletion_protection        = false
+  delete_automated_backups   = false
+  backup_window              = "10:00-11:00"
+  backup_retention_period    = 21
+  db_subnet_group_name       = var.database_subnet_group_name != null ? var.database_subnet_group_name : var.name
+  vpc_security_group_ids     = [aws_security_group.keycloak-security-group.id]
+  storage_encrypted          = true
+  auto_minor_version_upgrade = false # We recommend you do not upgrade the database version automatically, as it will put the database out-of-sync with the terraform.
 
   tags = {
     Name        = var.name

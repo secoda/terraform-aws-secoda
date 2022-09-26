@@ -471,7 +471,8 @@ resource "aws_ecs_task_definition" "main" {
   cpu    = 2048
   memory = 8192
 
-  container_definitions = jsonencode(
+  # Use the `nonsensitive()` operator to view the diff in case of unknown `force replacement`.
+  container_definitions = (jsonencode(
     [for s in var.services :
       merge(
         ({
@@ -480,6 +481,7 @@ resource "aws_ecs_task_definition" "main" {
           if v != null
         }),
         {
+
           name  = s.name
           image = s.image ? s.image_id : "secoda/on-premise-${s.name}:${s.tag}"
 
@@ -560,7 +562,9 @@ resource "aws_ecs_task_definition" "main" {
 
           healthCheck = s.healthCheck
 
-          mountPoints = s.mountPoints
+          mountPoints = s.mountPoints != null ? s.mountPoints : []
+
+          volumesFrom = []
 
           ulimits = s.ulimits
 
@@ -574,7 +578,7 @@ resource "aws_ecs_task_definition" "main" {
           }
       })
     ]
-  )
+  ))
 
   lifecycle {
     ignore_changes = [
@@ -589,5 +593,5 @@ resource "aws_ecs_task_definition" "main" {
 # Create a data source to pull the latest active revision from.
 data "aws_ecs_task_definition" "main" {
   task_definition = aws_ecs_task_definition.main.family
-  depends_on      = [aws_ecs_task_definition.main] # ensures at least one task def exists
+  depends_on      = [aws_ecs_task_definition.main] # Ensures at least one task def exists.
 }
