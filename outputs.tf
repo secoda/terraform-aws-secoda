@@ -10,15 +10,15 @@ output "security_group_id" {
 
 output "vpc_id" {
   description = "VPC ID used for Secoda"
-  value       = module.vpc.vpc_id
+  value       = length(module.vpc) > 0 ? module.vpc[0].vpc_id : ""
 }
 
 output "public_subnet_ids" {
   description = "Subnet IDs used for Secoda"
-  value       = module.vpc.public_subnets
+  value       = length(module.vpc) > 0 ? module.vpc[0].public_subnets : []
 }
 
 output "private_subnet_ids" {
   description = "Subnet IDs used for Secoda"
-  value       = module.vpc.private_subnet_arns
+  value       = length(module.vpc) > 0 ? module.vpc[0].private_subnets : []
 }
