@@ -12,7 +12,7 @@ If you have previously applied a version of our terraform from a private reposit
 
 Reminder: before pulling the latest changes and running terraform, always take a backup of your data and confirm it is viable.
 
-This deployment option uses **ECS Fargate**, RDS Postgres, and Elasticcache Redis. These files will create a secure, separate VPC that will run Secoda on ECS (via Fargate).
+This deployment option uses **ECS Fargate**, RDS Postgres, and ElastiCache Redis. These files will create a secure, separate VPC that will run Secoda on ECS (via Fargate).
 
 ## Initial Steps
 
@@ -30,15 +30,14 @@ certificate_arn = "arn:aws:acm:us-east-1:982277954161:certificate/42238321-4205-
 aws_region = "us-east-1"
 ```
 
-## Deployment
+## Simple deployment
 
 1. Fill in administrator keys for `AWS_ACCESS_KEY` `AWS_SECRET_ACCESS_KEY` and the region you would like to deploy to `AWS_REGION`.
 
 ```bash
-# Install terraform (for MacOS here)
 brew install terraform
-# `cd` to this cloned repository.
-# Initialize terraform
+git clone https://github.com/secoda/terraform-aws-secoda
+cd terraform-aws-secoda
 terraform init
 AWS_ACCESS_KEY=<YOUR_KEY> AWS_SECRET_ACCESS_KEY=<YOUR_KEY> AWS_REGION=<REGION> terraform apply -var-file="onprem.tfvars"
 ```
@@ -46,8 +45,7 @@ AWS_ACCESS_KEY=<YOUR_KEY> AWS_SECRET_ACCESS_KEY=<YOUR_KEY> AWS_REGION=<REGION> t
 1. Type `Yes` at the prompt.
 2. Once complete, terraform will output the load balancer DNS name. You must create a CNAME record with your DNS provider that points `secoda.yourcompany.com` to the load balancer DNS name.
 3. Wait about 5 minutes. Then open `https://secoda.yourcompany.com` to test out the service. It will only listen on **HTTPS**.
-4. Optional: we suggest using _Cloudflare ZeroTrust_ to limit access to Secoda.
-5. **You're done! 🎊**
+4. We suggest using _Cloudflare ZeroTrust_ to limit access to Secoda; optional.
 
 ## Connecting to Secoda
 
@@ -61,8 +59,8 @@ By default, this terraform code will put the on-premise version of Secoda in a s
 
 There are three different ways of connecting your on-premise integrations to Secoda:
 
-1. Whitelisting and setting up security rules for the NAT Gateway EIP to your resource. **(VPC to Internet to VPC)** (Default)
-   - Works out the box.
+1. (Default) Whitelisting and setting up security rules for the NAT Gateway EIP to your resource. **(VPC to Internet to VPC)**
+   - Works OOTB.
 2. AWS VPC Peering and whitelisting security rules for access from the AWS VPC network. **(VPC to VPC)**
    - Requires manual setup or additional terraform code.
 3. Put Secoda in the same VPC and setup security rules to your resource. **(intra-VPC)**
@@ -70,20 +68,19 @@ There are three different ways of connecting your on-premise integrations to Sec
 
 We are happy to help with any of these steps. (ping @LikeCarter).
 
-## Updating to the latest minor version
+## Updating to the latest version
 
 NOTE: Ensure no one is entering information into Secoda at the time of update. There will be approximately 3-4 minutes of downtime.
 
-1. Go to ECS > Cluster (Secoda Cluster) > Tasks.
-2. Check the _single_ running Secoda task. Click Stop.
-3. Wait about 30 seconds for a new task to start automatically. Do not force a new task to start. Hit the refresh button to check. It will pull the latest version of Secoda.
+1. Pull the latest terraform OR if using Secoda as a terraform module, bump the pinned version. Reapply the terraform. 
+2. Wait for a new ECS task to start automatically. Hit the refresh button to check. It should pull the latest version of Secoda.
 
 ## SSO
 
 1. You can configure SSO by logging into the master realm located here:
 
 ```bash
-https://secoda.yourcompany.com/auth/admin/master/console/#/realms/secoda
+https://<DOMAIN>/auth/admin/master/console/#/realms/secoda
 ```
 
 1. Once logged in, switch to the `Secoda` realm and proceed with adding SSO.
@@ -95,7 +92,7 @@ https://secoda.yourcompany.com/auth/admin/master/console/#/realms/secoda
 - OneLogin
 - SAML2.0
 
-## Troubleshooting (Common Errors)
+## Troubleshooting / FAQ
 
 `MalformedPolicyDocumentException: Policy contains a statement with one or more invalid service principals`: please try using a different AWS administrator account, or create a new one with a different name.
 
@@ -105,9 +102,9 @@ https://secoda.yourcompany.com/auth/admin/master/console/#/realms/secoda
 
 # Misc.
 
-## Hashicorp Cloud (Optional)
+## Hashicorp Cloud
 
-If your state files are stored in Hashicorp cloud (recommended), please complete the following steps. You should be a member of a _Terraform Cloud_ account before proceeding.
+To store state in Hashicorp cloud, which we recommend, please complete the following steps. You should be a member of a _Terraform Cloud_ account before proceeding.
 
 In this directory, run `terraform login`. In `versions.tf` please uncomment the following lines and replace `secoda` with your organization name.
 
