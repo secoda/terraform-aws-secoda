@@ -45,6 +45,6 @@ module "vpc" {
 }
 
 resource "aws_eip" "nat" {
-  count = 1
+  count = var.vpc_id == null ? 1 : 0
   vpc   = true
 }
