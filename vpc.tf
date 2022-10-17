@@ -41,7 +41,7 @@ module "vpc" {
 
   # Skip creation of EIPs for the NAT Gateways. This will preserve the EIP across resets.
   reuse_nat_ips       = true
-  external_nat_ip_ids = aws_eip.nat.*.id
+  external_nat_ip_ids = aws_eip.nat[*].id
 }
 
 resource "aws_eip" "nat" {
