@@ -165,15 +165,17 @@ variable "services" {
 
   default = [
     {
-      tag         = "5.4.0"
-      name        = "api"
-      mem         = 6144
-      cpu         = 1536
-      ports       = [5007]
-      essential   = true
-      image       = false
-      environment = []
-      command     = null
+      tag       = "5.4.3"
+      name      = "api"
+      mem       = 6144
+      cpu       = 1536
+      ports     = [5007]
+      essential = true
+      image     = false
+      environment = [
+
+      ]
+      command = null
       dependsOn = [
         {
           "containerName" = "auth"
@@ -194,15 +196,17 @@ variable "services" {
       ulimits     = null
     },
     {
-      tag         = "5.4.0"
-      name        = "frontend"
-      mem         = 1024
-      cpu         = 256
-      ports       = [443]
-      essential   = true
-      image       = false
-      environment = []
-      command     = null
+      tag       = "5.4.3"
+      name      = "frontend"
+      mem       = 1024
+      cpu       = 256
+      ports     = [443]
+      essential = true
+      image     = false
+      environment = [
+
+      ]
+      command = null
       dependsOn = [
         {
           "containerName" = "auth"
