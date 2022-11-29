@@ -8,12 +8,11 @@ terraform {
     }
   }
 
-  # If using terraform cloud, you may uncomment the following:
   # backend "remote" {
   #   # If using terraform cloud, please replace `organization = "secoda"` with your organization name.
   #   organization = "secoda"
   #   workspaces {
-  #     name = "secoda-on-premise"
+  #     name = "secoda-on-premise-test"
   #   }
   # }
 }
