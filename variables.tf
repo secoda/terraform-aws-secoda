@@ -218,7 +218,7 @@ variable "services" {
       ulimits     = null
     },
     {
-      tag       = "0.0.0"
+      tag       = "5.0.0"
       name      = "auth"
       mem       = 1024
       cpu       = 256
