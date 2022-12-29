@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.3"
+  required_version = ">= 1.3.5"
 
   required_providers {
     aws = {
@@ -8,11 +8,11 @@ terraform {
     }
   }
 
-  # backend "remote" {
-  #   # If using terraform cloud, please replace `organization = "secoda"` with your organization name.
-  #   organization = "secoda"
-  #   workspaces {
-  #     name = "secoda-on-premise-test"
-  #   }
-  # }
+  backend "remote" {
+    # If using terraform cloud, please replace `organization = "secoda"` with your organization name.
+    organization = "secoda"
+    workspaces {
+      name = "secoda-on-premise-test"
+    }
+  }
 }
