@@ -30,8 +30,6 @@ module "ecs" {
   name     = var.name
   internal = var.internal # Whether this instance should have a load balancer that resolves to a private ip address.
 
-  ecs_exec_enable = true # Used for debugging errors.
-
   ssm_docker = module.secrets-manager.secret_arns.docker
 
   db_addr          = aws_db_instance.postgres.address # Used for keycloak and analytics.

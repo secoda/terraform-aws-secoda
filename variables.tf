@@ -173,7 +173,6 @@ variable "services" {
       essential = true
       image     = false
       environment = [
-
       ]
       command = null
       dependsOn = [
@@ -218,7 +217,7 @@ variable "services" {
       ulimits     = null
     },
     {
-      tag       = "5.0.0"
+      tag       = "5"
       name      = "auth"
       mem       = 1024
       cpu       = 256

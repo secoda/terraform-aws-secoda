@@ -342,9 +342,3 @@ variable "health_check_grace_period_seconds" {
   default     = 30
   type        = number
 }
-
-variable "ecs_exec_enable" {
-  description = "Enable the ability to execute commands on the containers via Amazon ECS Exec"
-  default     = false
-  type        = bool
-}

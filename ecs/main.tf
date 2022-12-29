@@ -415,7 +415,7 @@ resource "aws_ecs_service" "main" {
   cluster = var.aws_ecs_cluster.arn
 
   launch_type            = local.ecs_service_launch_type
-  enable_execute_command = var.ecs_exec_enable
+  enable_execute_command = true
 
   # Use latest active revision
   task_definition = "${aws_ecs_task_definition.main.family}:${max(
@@ -494,6 +494,10 @@ resource "aws_ecs_task_definition" "main" {
           essential         = tobool(s.essential)
 
           requires_compatibilities = ["FARGATE"]
+
+          linuxParameters = {
+            initProcessEnabled = true
+          }
 
           portMappings = [for p in s.ports :
             {
