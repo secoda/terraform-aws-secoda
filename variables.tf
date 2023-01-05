@@ -165,7 +165,7 @@ variable "services" {
 
   default = [
     {
-      tag       = "5.6.2"
+      tag       = "6.0.0"
       name      = "api"
       mem       = 6144
       cpu       = 1536
@@ -173,6 +173,22 @@ variable "services" {
       essential = true
       image     = false
       environment = [
+
+        {
+          "name" : "VITE_NEW_AUTH",
+          "value" : "true",
+        },
+        {
+          "name" : "VITE_OKTA_METADATA_URL",
+          "value" : "https://dev-51537737.okta.com/app/exk7u63arj7T8CVHE5d7/sso/saml/metadata",
+        },
+
+        {
+          "name" : "OKTA_ENTITY_ID",
+          "value" : "https://secoda-1446252926.us-east-1.elb.amazonaws.com/api/v1/auth/saml/acs/",
+        },
+
+  
       ]
       command = null
       dependsOn = [
@@ -195,7 +211,7 @@ variable "services" {
       ulimits     = null
     },
     {
-      tag       = "5.6.2"
+      tag       = "6.0.0"
       name      = "frontend"
       mem       = 1024
       cpu       = 256
@@ -203,6 +219,19 @@ variable "services" {
       essential = true
       image     = false
       environment = [
+        {
+          "name" : "VITE_NEW_AUTH",
+          "value" : "true",
+        },
+        {
+          "name" : "VITE_OKTA_METADATA_URL",
+          "value" : "https://dev-51537737.okta.com/app/exk7u63arj7T8CVHE5d7/sso/saml/metadata",
+        },
+
+        {
+          "name" : "OKTA_ENTITY_ID",
+          "value" : "https://secoda-1446252926.us-east-1.elb.amazonaws.com/api/v1/auth/saml/acs/",
+        },
 
       ]
       command = null

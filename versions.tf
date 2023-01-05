@@ -8,11 +8,11 @@ terraform {
     }
   }
 
-  # backend "remote" {
-  #   # If using terraform cloud, please replace `organization = "secoda"` with your organization name.
-  #   organization = "secoda"
-  #   workspaces {
-  #     name = "secoda-on-premise-test"
-  #   }
-  # }
+  backend "remote" {
+    # If using terraform cloud, please replace `organization = "secoda"` with your organization name.
+    organization = "secoda"
+    workspaces {
+      name = "secoda-on-premise-test"
+    }
+  }
 }
