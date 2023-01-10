@@ -3,6 +3,7 @@ module "secrets-manager" {
 
   secrets = {
     docker = {
+      name = "docker-secret-${var.name}-${var.environment}"
       description = "Secoda docker hub credentials."
       secret_key_value = {
         username = "secodaonpremise"
