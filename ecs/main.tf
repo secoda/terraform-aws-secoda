@@ -308,7 +308,7 @@ data "aws_iam_policy_document" "ecs_assume_role_policy" {
 
 data "aws_iam_policy_document" "task_execution_role_policy_doc" {
 
-  # Docker hub authentication
+  # Docker hub authentication.
   statement {
     actions = [
       "secretsmanager:GetSecretValue"
@@ -360,6 +360,17 @@ data "aws_iam_policy_document" "task_role_ecs_exec" {
 
     resources = var.s3_resources
   }
+
+  statement {
+    sid = "AllowRoleAssumption"
+
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    resources = ["*"]
+  }
+
 
   # ECS exec for debugging
   statement {
