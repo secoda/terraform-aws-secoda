@@ -50,13 +50,14 @@ module "ecs" {
   # Set the certificate if it is supplied, otherwise use the self-signed one.
   certificate_arn = var.certificate_arn == "" ? aws_acm_certificate.alb[0].arn : var.certificate_arn
 
-  aws_region          = var.aws_region
-  associate_alb       = true
-  aws_ecs_cluster     = aws_ecs_cluster.main
-  services            = var.services
-  ecs_vpc_id          = var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id
-  ecs_private_subnets = var.vpc_id == null ? module.vpc[0].private_subnets : var.private_subnets
-  ecs_public_subnets  = var.vpc_id == null ? module.vpc[0].public_subnets : var.public_subnets
+  aws_region           = var.aws_region
+  associate_alb        = true
+  aws_ecs_cluster      = aws_ecs_cluster.main
+  add_environment_vars = var.add_environment_vars
+  services             = var.services
+  ecs_vpc_id           = var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id
+  ecs_private_subnets  = var.vpc_id == null ? module.vpc[0].private_subnets : var.private_subnets
+  ecs_public_subnets   = var.vpc_id == null ? module.vpc[0].public_subnets : var.public_subnets
 
   ecs_sg_id = aws_security_group.ecs_sg.id
 }

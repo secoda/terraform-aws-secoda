@@ -557,7 +557,7 @@ resource "aws_ecs_task_definition" "main" {
               "name" : "KC_DB_URL", # >= v18
               "value" : "jdbc:postgresql://${var.db_addr}/keycloak",
             },
-
+            var.add_environment_vars
           ])
 
           command = s.command

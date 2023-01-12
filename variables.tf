@@ -116,11 +116,23 @@ variable "certificate_arn" {
   default = ""
 }
 
+variable "certificate_arn_2" {
+  type    = string
+  default = ""
+}
+
 ################################################################################
 # Containers
 ################################################################################
 
-# If you are not familiar with terraform, do not modify these services without consulting Secoda.
+variable "add_environment_vars" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  default = []
+}
+
 variable "services" {
   type = list(object({
     tag       = string

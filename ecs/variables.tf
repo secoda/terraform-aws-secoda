@@ -69,6 +69,14 @@ variable "aws_ecs_cluster" {
   })
 }
 
+variable "add_environment_vars" {
+  type = list(object({
+      name  = string
+      value = string
+  }))
+  default = []
+}
+
 variable "services" {
   type = list(object({
     tag       = string
