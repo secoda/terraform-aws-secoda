@@ -12,7 +12,7 @@ resource "aws_db_instance" "postgres" {
   max_allocated_storage      = 60
   allocated_storage          = 12
   engine                     = "postgres"
-  engine_version             = "13.7"
+  engine_version             = var.database_version
   instance_class             = "db.t4g.small" # Adjust as needed. We suggest Graviton instances (t4g) for better price/performance.
   identifier                 = local.name
   name                       = "keycloak"

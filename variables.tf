@@ -26,6 +26,11 @@ variable "public_subnets" {
   default = null
 }
 
+variable "database_version" {
+  type    = string
+  default = "13.7"
+}
+
 variable "database_subnets" {
   type    = list(string)
   default = null
