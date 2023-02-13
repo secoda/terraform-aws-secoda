@@ -1,6 +1,6 @@
 
 ################################################################################
-# License
+# Docker Credentials
 ################################################################################
 
 # Our customer support will provide you with a docker password.
@@ -130,6 +130,21 @@ variable "certificate_arn_2" {
 # Containers
 ################################################################################
 
+variable "proxy_instance" {
+  type    = bool
+  default = false
+}
+
+variable "proxy_inbound_cidr" {
+  type    = string
+  default = ""
+}
+
+variable "proxy_public_key" {
+  type    = string
+  default = ""
+}
+
 variable "add_environment_vars" {
   type = list(object({
     name  = string
@@ -182,7 +197,7 @@ variable "services" {
 
   default = [
     {
-      tag       = "6.1.4"
+      tag       = "6.1.5"
       name      = "api"
       mem       = 6144
       cpu       = 1536
@@ -215,7 +230,7 @@ variable "services" {
       ulimits     = null
     },
     {
-      tag       = "6.1.4"
+      tag       = "6.1.5"
       name      = "frontend"
       mem       = 1024
       cpu       = 256
