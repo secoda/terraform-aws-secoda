@@ -197,7 +197,7 @@ variable "services" {
 
   default = [
     {
-      tag       = "6.1.8"
+      tag       = "6.1.9"
       name      = "api"
       mem       = 6144
       cpu       = 1536
@@ -230,7 +230,7 @@ variable "services" {
       ulimits     = null
     },
     {
-      tag       = "6.1.8"
+      tag       = "6.1.9"
       name      = "frontend"
       mem       = 1024
       cpu       = 256
