@@ -224,7 +224,7 @@ variable "services" {
         ],
         "timeout" : 5,
         "interval" : 5,
-        "startPeriod" : 60
+        "startPeriod" : 120
       }
       mountPoints = null
       ulimits     = null
