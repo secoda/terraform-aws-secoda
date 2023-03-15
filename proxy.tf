@@ -7,6 +7,7 @@ locals {
 # Typically used to spin-up a tailscale instance with access to RDS.
 module "proxy" {
   count                       = var.proxy_instance ? 1 : 0
+  instance_type = "t4g.nano"
   source                      = "cloudposse/ec2-instance/aws"
   version                     = "0.44.0"
   ssh_key_pair                = aws_key_pair.proxy[0].key_name
