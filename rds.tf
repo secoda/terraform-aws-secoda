@@ -9,6 +9,7 @@ locals {
 # The analysis database must be initialized with init_db.sh before it will work with the analysis service
 
 resource "aws_db_instance" "postgres" {
+  performance_insights_enabled = var.performance_insights_enabled
   max_allocated_storage      = 60
   allocated_storage          = 12
   engine                     = "postgres"
