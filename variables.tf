@@ -26,6 +26,11 @@ variable "public_subnets" {
   default = null
 }
 
+variable "performance_insights_enabled" {
+  type    = bool
+  default = false
+}
+
 variable "database_version" {
   type    = string
   default = "13.7"
