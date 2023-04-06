@@ -23,7 +23,7 @@ resource "random_password" "keycloak_admin_password" {
 module "ecs" {
   source = "./ecs/"
 
-  es_host = aws_elasticsearch_domain.es.endpoint
+  es_host     = aws_elasticsearch_domain.es.endpoint
   es_username = local.username
   es_password = random_password.es.result
 

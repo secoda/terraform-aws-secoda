@@ -2,13 +2,33 @@ locals {
   proxy_name = "${var.name}-${var.environment}-proxy"
   stage      = "prd"
   namespace  = "secoda"
+  ami_owner  = "099720109477"
+}
+
+data "aws_ami" "ubuntu" {
+
+    most_recent = true
+
+    filter {
+        name   = "name"
+        values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-arm64-server-*"]
+    }
+
+    filter {
+        name = "virtualization-type"
+        values = ["hvm"]
+    }
+
+    owners = [local.ami_owner]
 }
 
 # Typically used to spin-up a tailscale instance with access to RDS.
 module "proxy" {
   count                       = var.proxy_instance ? 1 : 0
-  instance_type = "t4g.nano"
+  instance_type               = "t4g.nano"
   source                      = "cloudposse/ec2-instance/aws"
+  ami                         = data.aws_ami.ubuntu.id
+  ami_owner                   = local.ami_owner
   version                     = "0.44.0"
   ssh_key_pair                = aws_key_pair.proxy[0].key_name
   vpc_id                      = module.vpc[0].vpc_id

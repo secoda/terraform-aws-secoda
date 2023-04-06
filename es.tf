@@ -49,7 +49,7 @@ resource "aws_elasticsearch_domain" "es" {
   }
 
   cluster_config {
-    instance_type = "t4g.small.elasticsearch"
+    instance_type = "t3.small.elasticsearch"
   }
 
   encrypt_at_rest {
@@ -57,7 +57,7 @@ resource "aws_elasticsearch_domain" "es" {
   }
 
   vpc_options {
-    subnet_ids         = [module.vpc.private_subnets[0]]
+    subnet_ids         = [module.vpc[0].private_subnets[0]]
     security_group_ids = [aws_security_group.es.id]
   }
 
@@ -69,7 +69,7 @@ resource "aws_elasticsearch_domain" "es" {
             "Action": "es:*",
             "Principal": "*",
             "Effect": "Allow",
-            "Resource": "arn:aws:es:${var.region}:${data.aws_caller_identity.current.account_id}:domain/${local.domain}/*"
+            "Resource": "arn:aws:es:${var.aws_region}:${data.aws_caller_identity.current.account_id}:domain/${local.domain}/*"
         }
     ]
 }
@@ -85,14 +85,15 @@ CONFIG
 resource "aws_security_group" "es" {
   name        = "es-${local.domain}"
   description = "Managed by Terraform"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = module.vpc[0].vpc_id
 
   ingress {
     from_port = 443
     to_port   = 443
     protocol  = "tcp"
 
-    cidr_blocks = module.vpc.private_subnets
+    cidr_blocks = var.private_subnets_blocks
+  }
 
 }
 

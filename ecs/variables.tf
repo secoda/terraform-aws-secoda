@@ -15,7 +15,7 @@ variable "db_addr" {
 }
 
 variable "keycloak_secret_key" {
-  type = string
+  type    = string
   default = null
 }
 
@@ -27,6 +27,18 @@ variable "keycloak_admin_password" {
 variable "keycloak_database_password" {
   type        = string
   description = "The password for the database."
+}
+
+variable "es_username" {
+  type = string
+}
+
+variable "es_host" {
+  type = string
+}
+
+variable "es_password" {
+  type = string
 }
 
 ################################################################################
@@ -71,8 +83,8 @@ variable "aws_ecs_cluster" {
 
 variable "add_environment_vars" {
   type = list(object({
-      name  = string
-      value = string
+    name  = string
+    value = string
   }))
   default = []
 }
