@@ -568,6 +568,18 @@ resource "aws_ecs_task_definition" "main" {
               "name" : "KC_DB_URL", # >= v18
               "value" : "jdbc:postgresql://${var.db_addr}/keycloak",
             },
+            {
+              "name" : "ES_HOST",
+              "value" : var.es_host,
+            },
+            {
+              "name" : "ES_USERNAME",
+              "value" : var.es_username,
+            },
+            {
+              "name" : "ES_PASSWORD",
+              "value" : var.es_password,
+            },
             var.add_environment_vars
           ])
 

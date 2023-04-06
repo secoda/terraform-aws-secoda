@@ -23,6 +23,10 @@ resource "random_password" "keycloak_admin_password" {
 module "ecs" {
   source = "./ecs/"
 
+  es_host = aws_elasticsearch_domain.es.endpoint
+  es_username = local.username
+  es_password = random_password.es.result
+
   depends_on = [
     aws_db_instance.postgres, # Must wait for database to spin up to run migrations.
   ]
