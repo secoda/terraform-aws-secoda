@@ -27,3 +27,5 @@ secoda.onprem.tfvars
 custom.secoda-secrets.yaml
 
 .DS_Store
+
+.trunk
