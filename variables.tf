@@ -202,7 +202,7 @@ variable "services" {
 
   default = [
     {
-      tag       = "6.3.1"
+      tag       = "6.3.2"
       name      = "api"
       mem       = 6144
       cpu       = 1536
@@ -210,9 +210,6 @@ variable "services" {
       essential = true
       image     = false
       environment = [
-
-
-
       ]
       command = null
       dependsOn = [
@@ -235,7 +232,7 @@ variable "services" {
       ulimits     = null
     },
     {
-      tag       = "6.3.1"
+      tag       = "6.3.2"
       name      = "frontend"
       mem       = 1024
       cpu       = 256
