@@ -98,20 +98,6 @@ variable "aws_region" {
 }
 
 ################################################################################
-# Authentication
-################################################################################
-
-variable "keycloak_secret_key" {
-  type    = string
-  default = null
-}
-
-variable "keycloak_admin_password" {
-  type    = string
-  default = null
-}
-
-################################################################################
 # Load Balancers
 ################################################################################
 
@@ -202,22 +188,18 @@ variable "services" {
 
   default = [
     {
-      tag       = "6.3.2"
+      tag       = "7.1.2"
       name      = "api"
-      mem       = 6144
-      cpu       = 1536
+      mem       = 7168
+      cpu       = 1792
       ports     = [5007]
       essential = true
       image     = false
       environment = [
+
       ]
-      command = null
-      dependsOn = [
-        {
-          "containerName" = "auth"
-          "condition"     = "HEALTHY"
-        }
-      ]
+      command   = null
+      dependsOn = []
       healthCheck = {
         "retries" : 3,
         "command" : [
@@ -232,7 +214,7 @@ variable "services" {
       ulimits     = null
     },
     {
-      tag       = "6.3.2"
+      tag       = "7.1.2"
       name      = "frontend"
       mem       = 1024
       cpu       = 256
@@ -241,57 +223,15 @@ variable "services" {
       image     = false
       environment = [
 
-
       ]
       command = null
       dependsOn = [
         {
-          "containerName" = "auth"
+          "containerName" = "api"
           "condition"     = "HEALTHY"
         }
       ]
       healthCheck = null
-      mountPoints = null
-      ulimits     = null
-    },
-    {
-      tag       = "5"
-      name      = "auth"
-      mem       = 1024
-      cpu       = 256
-      ports     = [8080, 8443]
-      essential = true
-      image     = false
-
-      environment = [
-        {
-          "name" : "KC_DB_USERNAME", # >= v18
-          "value" : "keycloak",
-        },
-        {
-          "name" : "KEYCLOAK_ADMIN", # >= v18
-          "value" : "admin",
-        },
-        # v16, but some are also used by other services, so cannot be retired yet.
-        {
-          "name" : "KEYCLOAK_USER",
-          "value" : "admin",
-        },
-      ]
-      command = [
-        "start --auto-build --http-relative-path /auth --hostname-strict false --proxy edge --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true --import-realm"
-      ]
-      dependsOn = null
-      healthCheck = {
-        "retries" : 5,
-        "command" : [
-          "CMD-SHELL",
-          "curl -f http://localhost:8080/auth/realms/secoda/.well-known/openid-configuration || exit 1"
-        ],
-        "timeout" : 5,
-        "interval" : 10,
-        "startPeriod" : 90
-      }
       mountPoints = null
       ulimits     = null
     }

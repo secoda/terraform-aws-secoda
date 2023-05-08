@@ -43,9 +43,9 @@ module "ecs" {
     "${module.manifest_bucket.arn}/*"
   ] # Optional, the s3 buckets this task should have access to. In policy statement resource format. Typically used for accessing the S3 bucket of manifest files.
 
+  es_password                = random_password.es.result
+  es_host                    = aws_opensearch_domain.es.endpoint
   keycloak_database_password = random_password.keycloak_database.result
-  keycloak_admin_password    = var.keycloak_admin_password == null ? random_password.keycloak_admin_password.result : var.keycloak_admin_password
-  keycloak_secret_key        = var.keycloak_secret_key
 
   # Set the certificate if it is supplied, otherwise use the self-signed one.
   certificate_arn = var.certificate_arn == "" ? aws_acm_certificate.alb[0].arn : var.certificate_arn

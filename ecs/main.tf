@@ -476,6 +476,18 @@ resource "aws_ecs_task_definition" "main" {
 
           environment = flatten([s.environment,
             {
+              "name" : "ES_HOST",
+              "value" : var.es_host,
+            },
+            {
+              "name" : "ES_USERNAME",
+              "value" : "elastic",
+            },
+            {
+              "name" : "ES_PASSWORD",
+              "value" : var.es_password,
+            },
+            {
               "name" : "APISERVICE_SECRET",
               "value" : random_uuid.api_secret.result,
             },
@@ -498,31 +510,6 @@ resource "aws_ecs_task_definition" "main" {
             {
               "name" : "APISERVICE_DATABASE_CONNECTION",
               "value" : "postgresql://keycloak:${var.keycloak_database_password}@${var.db_addr}:5432/secoda",
-            },
-            # Keycloak
-            {
-              "name" : "KEYCLOAK_ADMIN_PASSWORD", # >= v18
-              "value" : var.keycloak_admin_password,
-            },
-            {
-              "name" : "KEYCLOAK_PASSWORD", # Needed for backwards compatibility.
-              "value" : var.keycloak_admin_password,
-            },
-            {
-              "name" : "KEYCLOAK_SECRET",
-              "value" : var.keycloak_secret_key == null ? random_uuid.keycloak_secret.result : var.keycloak_secret_key,
-            },
-            {
-              "name" : "KC_DB", # >= v18
-              "value" : "postgres",
-            },
-            {
-              "name" : "KC_DB_PASSWORD", # >= v18
-              "value" : var.keycloak_database_password,
-            },
-            {
-              "name" : "KC_DB_URL", # >= v18
-              "value" : "jdbc:postgresql://${var.db_addr}/keycloak",
             },
             var.add_environment_vars
           ])

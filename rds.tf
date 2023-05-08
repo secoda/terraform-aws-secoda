@@ -10,24 +10,24 @@ locals {
 
 resource "aws_db_instance" "postgres" {
   performance_insights_enabled = var.performance_insights_enabled
-  max_allocated_storage      = 60
-  allocated_storage          = 12
-  engine                     = "postgres"
-  engine_version             = var.database_version
-  instance_class             = "db.t4g.small" # Adjust as needed. We suggest Graviton instances (t4g) for better price/performance.
-  identifier                 = local.name
-  name                       = "keycloak"
-  username                   = "keycloak"
-  password                   = random_password.keycloak_database.result
-  skip_final_snapshot        = true
-  deletion_protection        = false
-  delete_automated_backups   = false
-  backup_window              = "10:00-11:00"
-  backup_retention_period    = 21
-  db_subnet_group_name       = var.database_subnet_group_name != null ? var.database_subnet_group_name : var.name
-  vpc_security_group_ids     = concat([aws_security_group.keycloak-security-group.id], var.proxy_instance ? [aws_security_group.cidr_rds_security_group[0].id] : [])
-  storage_encrypted          = true
-  auto_minor_version_upgrade = false # We recommend you do not upgrade the database version automatically, as it will put the database out-of-sync with the terraform.
+  max_allocated_storage        = 60
+  allocated_storage            = 12
+  engine                       = "postgres"
+  engine_version               = var.database_version
+  instance_class               = "db.t4g.small" # Adjust as needed. We suggest Graviton instances (t4g) for better price/performance.
+  identifier                   = local.name
+  name                         = "keycloak"
+  username                     = "keycloak"
+  password                     = random_password.keycloak_database.result
+  skip_final_snapshot          = true
+  deletion_protection          = false
+  delete_automated_backups     = false
+  backup_window                = "10:00-11:00"
+  backup_retention_period      = 21
+  db_subnet_group_name         = var.database_subnet_group_name != null ? var.database_subnet_group_name : var.name
+  vpc_security_group_ids       = concat([aws_security_group.keycloak-security-group.id], var.proxy_instance ? [aws_security_group.cidr_rds_security_group[0].id] : [])
+  storage_encrypted            = true
+  auto_minor_version_upgrade   = false # We recommend you do not upgrade the database version automatically, as it will put the database out-of-sync with the terraform.
 
   tags = {
     Name        = var.name
@@ -72,13 +72,13 @@ resource "aws_security_group" "keycloak-security-group" {
 
 resource "aws_security_group" "cidr_rds_security_group" {
   name   = "${local.name}-cidr-rds-security-group"
-  count = var.proxy_instance ? 1 : 0
+  count  = var.proxy_instance ? 1 : 0
   vpc_id = var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id
 
   ingress {
-    from_port       = 5432
-    to_port         = 5432
-    protocol        = "tcp"
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
     cidr_blocks = [var.cidr]
   }
 
