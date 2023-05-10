@@ -505,7 +505,7 @@ resource "aws_ecs_task_definition" "main" {
             },
             {
               "name" : "REDIS_URL",
-              "value" : "rediss://default:${var.redis_auth_token}@${var.redis_addr}:6379",
+              "value" : "redis://${var.redis_addr}:6379",
             },
             {
               "name" : "APISERVICE_DATABASE_CONNECTION",

@@ -1,11 +1,10 @@
 module "this" {
   source    = "cloudposse/label/null"
   version   = "0.25.0"
-  namespace = "secoda"
+  namespace = "secoda-redis"
   stage     = "production"
   name      = var.name
 }
-
 
 module "redis" {
   source  = "cloudposse/elasticache-redis/aws"
@@ -19,18 +18,14 @@ module "redis" {
   allowed_security_group_ids = [aws_security_group.ecs_sg.id]
   subnets                    = var.vpc_id == null ? module.vpc[0].database_subnets : var.database_subnets
   cluster_size               = 1
-  instance_type              = "cache.t4g.micro"
+  instance_type              = "cache.t4g.medium"
   apply_immediately          = true
   automatic_failover_enabled = false
   engine_version             = "6.x"
   family                     = "redis6.x"
   at_rest_encryption_enabled = true
-  transit_encryption_enabled = true
-  auth_token                 = random_password.redis.result
+  # Due to limitations with celery, we need to disable in transit encryption.
+  # This carries very minimal security risk as the redis cluster is only accessible from the VPC.
+  transit_encryption_enabled = false
   context                    = module.this.context
-}
-
-resource "random_password" "redis" {
-  length  = 16
-  special = false
 }

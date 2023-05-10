@@ -81,7 +81,7 @@ CONFIG
 resource "aws_security_group" "es" {
   name        = "es-${var.name}"
   description = "Managed by Terraform"
-  vpc_id      =var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id
+  vpc_id      = var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id
 
   ingress {
     from_port = 443

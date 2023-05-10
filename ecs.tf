@@ -32,9 +32,8 @@ module "ecs" {
 
   ssm_docker = module.secrets-manager.secret_arns["docker-secret-${var.name}-${var.environment}"]
 
-  db_addr          = aws_db_instance.postgres.address # Used for keycloak and analytics.
-  redis_addr       = module.redis.endpoint            # Used for the job queue.
-  redis_auth_token = random_password.redis.result
+  db_addr    = aws_db_instance.postgres.address # Used for keycloak and analytics.
+  redis_addr = module.redis.endpoint            # Used for the job queue.
 
   private_bucket = module.manifest_bucket.name
 
