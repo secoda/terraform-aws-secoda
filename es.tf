@@ -92,7 +92,8 @@ resource "aws_security_group" "es" {
   }
 }
 
-# This may be required for ES on new accounts.
-resource "aws_iam_service_linked_role" "es" {
-  aws_service_name = "es.amazonaws.com"
+# This may be required for OpenSearch on new AWS accounts.
+resource "aws_iam_service_linked_role" "os" {
+  count = var.create_service_linked_role == true ? 1 : 0
+  aws_service_name = "opensearchservice.amazonaws.com"
 }
