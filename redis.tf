@@ -10,6 +10,13 @@ module "redis" {
   source  = "cloudposse/elasticache-redis/aws"
   version = "0.42.0"
 
+  parameter = [
+    {
+      name  = "maxmemory-policy"
+      value = "allkeys-lru"
+    }
+  ]
+
   replication_group_id = "${var.name}-rg-queue"
 
   availability_zones = var.aws_availability_zones != null ? var.aws_availability_zones : [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1]]
