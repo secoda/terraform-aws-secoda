@@ -14,7 +14,7 @@ resource "aws_db_instance" "postgres" {
   allocated_storage            = 12
   engine                       = "postgres"
   engine_version               = var.database_version
-  instance_class               = "db.t4g.small" # Adjust as needed. We suggest Graviton instances (t4g) for better price/performance.
+  instance_class               = var.rds_instance_type
   identifier                   = local.name
   name                         = "keycloak"
   username                     = "keycloak"

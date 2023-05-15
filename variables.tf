@@ -126,6 +126,12 @@ variable "certificate_arn_2" {
 # Containers
 ################################################################################
 
+ # Adjust as needed. We suggest Graviton instances (t4g) for better price/performance.
+variable "rds_instance_type" {
+  type    = string
+  default = "db.t4g.small"
+}
+
 variable "proxy_instance" {
   type    = bool
   default = false
