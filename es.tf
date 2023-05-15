@@ -76,6 +76,10 @@ CONFIG
     Environment = var.environment
     Terraform   = "true"
   }
+
+  depends_on = [
+    aws_iam_service_linked_role.os,
+  ]
 }
 
 resource "aws_security_group" "es" {
