@@ -126,7 +126,7 @@ variable "certificate_arn_2" {
 # Containers
 ################################################################################
 
- # Adjust as needed. We suggest Graviton instances (t4g) for better price/performance.
+# Adjust as needed. We suggest Graviton instances (t4g) for better price/performance.
 variable "rds_instance_type" {
   type    = string
   default = "db.t4g.small"
@@ -199,7 +199,7 @@ variable "services" {
 
   default = [
     {
-      tag       = "7.1.3"
+      tag       = "7.1.4"
       name      = "api"
       mem       = 7168
       cpu       = 1792
@@ -225,7 +225,7 @@ variable "services" {
       ulimits     = null
     },
     {
-      tag       = "7.1.3"
+      tag       = "7.1.4"
       name      = "frontend"
       mem       = 1024
       cpu       = 256
