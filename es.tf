@@ -98,6 +98,6 @@ resource "aws_security_group" "es" {
 
 # This may be required for OpenSearch on new AWS accounts.
 resource "aws_iam_service_linked_role" "os" {
-  count = var.create_service_linked_role == true ? 1 : 0
+  count            = var.create_service_linked_role == true ? 1 : 0
   aws_service_name = "opensearchservice.amazonaws.com"
 }

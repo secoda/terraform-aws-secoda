@@ -16,7 +16,7 @@ resource "aws_db_instance" "postgres" {
   engine_version               = var.database_version
   instance_class               = var.rds_instance_type
   identifier                   = local.name
-  name                         = "keycloak"
+  db_name                      = "keycloak"
   username                     = "keycloak"
   password                     = random_password.keycloak_database.result
   skip_final_snapshot          = true
