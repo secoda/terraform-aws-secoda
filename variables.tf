@@ -4,6 +4,11 @@ variable "create_service_linked_role" {
   default = true
 }
 
+variable "es_volume_size" {
+  type    = number
+  default = 32
+}
+
 ################################################################################
 # Docker Credentials
 ################################################################################
