@@ -3,7 +3,7 @@
 ```hcl
 module "secoda" {
   source  = "secoda/secoda/aws"
-  version = "7.2.0"
+  version = "7.2.1"
 
   name        = "secoda"
   environment = "production"
@@ -16,7 +16,7 @@ module "secoda" {
 
 ## Updating to the latest version
 
-1. Pull the latest terraform OR if using Secoda as a terraform module, bump the pinned version. Reapply the terraform. 
+1. Pull the latest terraform OR if using Secoda as a terraform module, bump the pinned version. Reapply the terraform.
 2. Wait for a new ECS task to start automatically. Hit the refresh button to check. It should pull the latest version of Secoda.
 
 ## SSO Options
@@ -43,7 +43,7 @@ In this directory, run `terraform login`. In `versions.tf` please uncomment the 
 
 ```yaml
 backend "remote" {
-  organization = "secoda"
+organization = "secoda"
 }
 ```
 
