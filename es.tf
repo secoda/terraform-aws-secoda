@@ -45,7 +45,7 @@ resource "aws_opensearch_domain" "es" {
   }
 
   cluster_config {
-    instance_type = "t3.medium.search"
+    instance_type = var.es_instance_type
   }
 
   encrypt_at_rest {
