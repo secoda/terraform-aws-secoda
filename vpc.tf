@@ -11,11 +11,12 @@ data "aws_vpc" "override" {
   count = var.vpc_id != null ? 1 : 0
   id    = var.vpc_id
 }
+
 module "vpc" {
 
   count   = var.vpc_id == null ? 1 : 0
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 3.0"
+  version = "5.0.0"
 
   name = var.name
   cidr = var.cidr
@@ -27,6 +28,8 @@ module "vpc" {
   # They require a NAT gateway to communicate with the internet.
   enable_nat_gateway = true
   single_nat_gateway = true
+
+  map_public_ip_on_launch = true
 
   manage_default_route_table = true
   default_route_table_tags   = { DefaultRouteTable = true }
@@ -45,6 +48,6 @@ module "vpc" {
 }
 
 resource "aws_eip" "nat" {
-  count = var.vpc_id == null ? 1 : 0
-  vpc   = true
+  count  = var.vpc_id == null ? 1 : 0
+  domain = "vpc"
 }
