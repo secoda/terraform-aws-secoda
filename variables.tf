@@ -254,7 +254,16 @@ variable "services" {
           "condition"     = "HEALTHY"
         }
       ]
-      healthCheck = null
+      healthCheck = {
+        "retries" : 3,
+        "command" : [
+          "CMD-SHELL",
+          "curl -f http://localhost:5006/healthcheck/ || exit 1"
+        ],
+        "timeout" : 5,
+        "interval" : 5,
+        "startPeriod" : 60
+      }
       mountPoints = null
       ulimits     = null
     }
