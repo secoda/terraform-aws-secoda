@@ -79,7 +79,7 @@ resource "aws_security_group" "cidr_rds_security_group" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = [var.cidr]
+    cidr_blocks = [var.vpc_id == null ? module.vpc[0].vpc_cidr_block : data.aws_vpc.override[0].cidr_block]
   }
 
   tags = {

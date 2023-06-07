@@ -70,6 +70,8 @@ variable "aws_availability_zones" {
 # General Networking
 ################################################################################
 
+# Do not use these values in the code,
+# as overriding the vpc (some customers) will make these values incorrect.
 variable "cidr" {
   type    = string
   default = "10.9.0.0/16"
@@ -252,7 +254,16 @@ variable "services" {
           "condition"     = "HEALTHY"
         }
       ]
-      healthCheck = null
+      healthCheck = {
+        "retries" : 3,
+        "command" : [
+          "CMD-SHELL",
+          "curl -f http://localhost:5006/healthcheck/ || exit 1"
+        ],
+        "timeout" : 5,
+        "interval" : 5,
+        "startPeriod" : 60
+      }
       mountPoints = null
       ulimits     = null
     }
