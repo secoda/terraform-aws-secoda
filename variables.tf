@@ -70,6 +70,8 @@ variable "aws_availability_zones" {
 # General Networking
 ################################################################################
 
+# Do not use these values in the code,
+# as overriding the vpc (some customers) will make these values incorrect.
 variable "cidr" {
   type    = string
   default = "10.9.0.0/16"

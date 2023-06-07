@@ -92,7 +92,7 @@ resource "aws_security_group" "es" {
     to_port   = 443
     protocol  = "tcp"
 
-    cidr_blocks = [var.cidr]
+    cidr_blocks = [var.vpc_id == null ? module.vpc[0].vpc_cidr_block : data.aws_vpc.override[0].cidr_block]
   }
 }
 
