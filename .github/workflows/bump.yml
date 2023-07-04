@@ -1,0 +1,42 @@
+name: Update HCL Code and Create Release
+
+on:
+  repository_dispatch:
+    types:
+      - version
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Version
+        id: set_version
+        run: echo "::set-output name=version::${{ github.event.client_payload.version }}"
+
+      - name: Update HCL Code
+        id: update_hcl_code
+        run: |
+          find . -type f -name '*.tf'  -not -path '*.terraform/*' | while read -r file; do
+            echo "Updating $file"
+            sed -i "s/tag\s*=\s*\"[0-9.]*\"/tag       = \"${{ steps.set_version.outputs.version }}\"/g" "$file"
+          done
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "chore(version): bump to v${{ steps.set_version.outputs.version }}"
+          git push
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.set_version.outputs.version }}
+          release_name: v${{ steps.set_version.outputs.version }}
+          draft: false
