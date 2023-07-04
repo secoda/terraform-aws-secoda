@@ -1,3 +1,7 @@
+variable "backup_name" {
+  type    = string
+  default = null
+}
 
 variable "create_service_linked_role" {
   type    = bool
