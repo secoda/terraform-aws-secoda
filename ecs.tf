@@ -1,3 +1,61 @@
+locals {
+  services = tolist([
+    {
+      tag       = "7.3.5"
+      name      = "api"
+      mem       = floor(3 * var.memory / 4)
+      cpu       = floor(3 * var.cpu / 4)
+      ports     = [5007]
+      essential = true
+      image     = false
+      environment = []
+      command   = null
+      dependsOn = []
+      healthCheck = {
+        "retries" : 3,
+        "command" : [
+          "CMD-SHELL",
+          "curl -f http://localhost:5007/healthcheck/ || exit 1"
+        ],
+        "timeout" : 5,
+        "interval" : 5,
+        "startPeriod" : 60
+      }
+      mountPoints = null
+      ulimits     = null
+    },
+    {
+      tag       = "7.3.5"
+      name      = "frontend"
+      mem       = floor(1 * var.memory / 4)
+      cpu       = floor(1 * var.cpu / 4)
+      ports     = [443]
+      essential = true
+      image     = false
+      environment = []
+      command = null
+      dependsOn = [
+        {
+          "containerName" = "api"
+          "condition"     = "HEALTHY"
+        }
+      ]
+      healthCheck = {
+        "retries" : 3,
+        "command" : [
+          "CMD-SHELL",
+          "curl -f http://localhost:5006/healthcheck/ || exit 1"
+        ],
+        "timeout" : 5,
+        "interval" : 5,
+        "startPeriod" : 60
+      }
+      mountPoints = null
+      ulimits     = null
+    }
+  ])
+}
+
 ################################################################################
 # ECS - Cluster
 ################################################################################
@@ -11,11 +69,6 @@ resource "aws_ecs_cluster" "main" {
 ################################################################################
 
 resource "random_password" "keycloak_database" {
-  length  = 16
-  special = false
-}
-
-resource "random_password" "keycloak_admin_password" {
   length  = 16
   special = false
 }
@@ -56,10 +109,11 @@ module "ecs" {
   associate_alb        = true
   aws_ecs_cluster      = aws_ecs_cluster.main
   add_environment_vars = var.add_environment_vars
-  services             = var.services
-  ecs_vpc_id           = var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id
-  ecs_private_subnets  = var.vpc_id == null ? module.vpc[0].private_subnets : var.private_subnets
-  ecs_public_subnets   = var.vpc_id == null ? module.vpc[0].public_subnets : var.public_subnets
+  services             = local.services
+
+  ecs_vpc_id          = var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id
+  ecs_private_subnets = var.vpc_id == null ? module.vpc[0].private_subnets : var.private_subnets
+  ecs_public_subnets  = var.vpc_id == null ? module.vpc[0].public_subnets : var.public_subnets
 
   ecs_sg_id = aws_security_group.ecs_sg.id
 }

@@ -5,7 +5,7 @@ variable "cpu" {
 
 variable "memory" {
   type    = number
-  default = 8096
+  default = 8192
 }
 
 variable "backup_name" {
@@ -223,63 +223,5 @@ variable "services" {
     }))
   }))
 
-  default = [
-    {
-      tag       = "7.3.5"
-      name      = "api"
-      mem       = 7168
-      cpu       = 1792
-      ports     = [5007]
-      essential = true
-      image     = false
-      environment = [
-
-      ]
-      command   = null
-      dependsOn = []
-      healthCheck = {
-        "retries" : 3,
-        "command" : [
-          "CMD-SHELL",
-          "curl -f http://localhost:5007/healthcheck/ || exit 1"
-        ],
-        "timeout" : 5,
-        "interval" : 5,
-        "startPeriod" : 60
-      }
-      mountPoints = null
-      ulimits     = null
-    },
-    {
-      tag       = "7.3.5"
-      name      = "frontend"
-      mem       = 1024
-      cpu       = 256
-      ports     = [443]
-      essential = true
-      image     = false
-      environment = [
-
-      ]
-      command = null
-      dependsOn = [
-        {
-          "containerName" = "api"
-          "condition"     = "HEALTHY"
-        }
-      ]
-      healthCheck = {
-        "retries" : 3,
-        "command" : [
-          "CMD-SHELL",
-          "curl -f http://localhost:5006/healthcheck/ || exit 1"
-        ],
-        "timeout" : 5,
-        "interval" : 5,
-        "startPeriod" : 60
-      }
-      mountPoints = null
-      ulimits     = null
-    }
-  ]
+  default = null
 }
