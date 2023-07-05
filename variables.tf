@@ -1,3 +1,13 @@
+variable "cpu" {
+  type    = number
+  default = 2048
+}
+
+variable "memory" {
+  type    = number
+  default = 8096
+}
+
 variable "backup_name" {
   type    = string
   default = null

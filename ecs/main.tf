@@ -435,8 +435,8 @@ resource "aws_ecs_task_definition" "main" {
     size_in_gib = 100
   }
 
-  cpu    = 2048
-  memory = 8192
+  cpu    = var.cpu
+  memory = var.memory
 
   # Use the `nonsensitive()` operator to view the diff in case of unknown `force replacement`.
   container_definitions = (jsonencode(
