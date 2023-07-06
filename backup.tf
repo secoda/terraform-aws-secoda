@@ -8,12 +8,12 @@ module "backup" {
   schedule          = "cron(0 5 * * ? *)"
   start_window      = 120
   completion_window = 720
-  delete_after      = 30
+  delete_after      = 90
 }
 
 resource "aws_backup_vault_lock_configuration" "backup_lock" {
   backup_vault_name   = module.backup.backup_vault_id
   changeable_for_days = 3
   max_retention_days  = 365
-  min_retention_days  = 7
+  min_retention_days  = 14
 }
