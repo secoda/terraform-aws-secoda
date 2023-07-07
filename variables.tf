@@ -13,6 +13,12 @@ variable "backup_name" {
   default = null
 }
 
+variable "cpu_architecture" {
+  description = "Architecture for fargate instance."
+  default     = "X86_64"
+  type        = string
+}
+
 variable "create_service_linked_role" {
   type    = bool
   default = true

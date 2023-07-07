@@ -76,7 +76,7 @@ resource "random_password" "keycloak_database" {
 module "ecs" {
   source = "./ecs/"
 
-  cpu_architecture = "ARM64"
+  cpu_architecture = var.cpu_architecture
 
   cpu    = var.cpu
   memory = var.memory
