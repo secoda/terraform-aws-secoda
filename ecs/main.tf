@@ -431,6 +431,11 @@ resource "aws_ecs_task_definition" "main" {
 
   requires_compatibilities = ["FARGATE"]
 
+  runtime_platform {
+    cpu_architecture        = var.cpu_architecture
+    operating_system_family = "LINUX"
+  }
+
   ephemeral_storage {
     size_in_gib = 100
   }

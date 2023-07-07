@@ -60,6 +60,12 @@ variable "ssm_docker" {
 # ECS
 ################################################################################
 
+variable "cpu_architecture" {
+  description = "Architecture for fargate instance."
+  default     = "X86_64"
+  type        = string
+}
+
 variable "name" {
   description = "The service name."
   type        = string

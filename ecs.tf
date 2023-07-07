@@ -1,16 +1,16 @@
 locals {
   services = tolist([
     {
-      tag       = "7.3.6"
-      name      = "api"
-      mem       = floor(3 * var.memory / 4)
-      cpu       = floor(3 * var.cpu / 4)
-      ports     = [5007]
-      essential = true
-      image     = false
+      tag         = "7.3.6"
+      name        = "api"
+      mem         = floor(3 * var.memory / 4)
+      cpu         = floor(3 * var.cpu / 4)
+      ports       = [5007]
+      essential   = true
+      image       = false
       environment = []
-      command   = null
-      dependsOn = []
+      command     = null
+      dependsOn   = []
       healthCheck = {
         "retries" : 3,
         "command" : [
@@ -25,15 +25,15 @@ locals {
       ulimits     = null
     },
     {
-      tag       = "7.3.6"
-      name      = "frontend"
-      mem       = floor(1 * var.memory / 4)
-      cpu       = floor(1 * var.cpu / 4)
-      ports     = [443]
-      essential = true
-      image     = false
+      tag         = "7.3.6"
+      name        = "frontend"
+      mem         = floor(1 * var.memory / 4)
+      cpu         = floor(1 * var.cpu / 4)
+      ports       = [443]
+      essential   = true
+      image       = false
       environment = []
-      command = null
+      command     = null
       dependsOn = [
         {
           "containerName" = "api"
@@ -75,6 +75,8 @@ resource "random_password" "keycloak_database" {
 
 module "ecs" {
   source = "./ecs/"
+
+  cpu_architecture = "ARM64"
 
   cpu    = var.cpu
   memory = var.memory
