@@ -27,3 +27,13 @@ output "aws_lb_dns" {
   description = "ARN of the lb."
   value       = aws_lb.main[0].dns_name
 }
+
+output "aws_lb_zone_id" {
+  description = "ARN of the lb."
+  value       = aws_lb.main[0].zone_id
+}
+
+output "aws_lb_arn" {
+  description = "ARN of the lb."
+  value       = aws_lb.main[0].arn
+}
