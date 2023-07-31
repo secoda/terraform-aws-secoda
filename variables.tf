@@ -26,7 +26,7 @@ variable "create_service_linked_role" {
 
 variable "es_volume_size" {
   type    = number
-  default = 32
+  default = 96
 }
 
 variable "es_instance_type" {
