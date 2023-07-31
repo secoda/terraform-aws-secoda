@@ -21,7 +21,7 @@ resource "aws_opensearch_domain" "es" {
     ebs_enabled = true
     volume_size = var.es_volume_size
     volume_type = "gp3"
-    throughput  = 125
+    throughput  = 256
     iops        = 3000
   }
 
