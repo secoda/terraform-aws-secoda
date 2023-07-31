@@ -10,7 +10,7 @@ locals {
 
 resource "aws_db_instance" "postgres" {
   performance_insights_enabled = var.performance_insights_enabled
-  max_allocated_storage        = 60
+  max_allocated_storage        = 256
   allocated_storage            = 12
   engine                       = "postgres"
   engine_version               = var.database_version
