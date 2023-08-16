@@ -110,7 +110,6 @@ module "ecs" {
   aws_region           = var.aws_region
   associate_alb        = true
   aws_ecs_cluster      = aws_ecs_cluster.main
-  add_environment_vars = var.add_environment_vars
   services             = local.services
 
   ecs_vpc_id          = var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id
@@ -118,6 +117,8 @@ module "ecs" {
   ecs_public_subnets  = var.vpc_id == null ? module.vpc[0].public_subnets : var.public_subnets
 
   ecs_sg_id = aws_security_group.ecs_sg.id
+
+  add_environment_vars = var.add_environment_vars
 }
 
 # Need to pull this out so that we can reference it in the RDS, etc.

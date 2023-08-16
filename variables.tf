@@ -184,7 +184,10 @@ variable "add_environment_vars" {
     name  = string
     value = string
   }))
-  default = []
+  default = [
+    { name : "AWS_ACCESS_KEY_ID", value : "" },
+    { name : "AWS_SECRET_ACCESS_KEY", value : "" },
+  ]
 }
 
 variable "services" {
