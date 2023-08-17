@@ -1,7 +1,7 @@
 locals {
   services = tolist([
     {
-      tag       = "7.4.12"
+      tag         = "7.4.12"
       name        = "api"
       mem         = floor(3 * var.memory / 4)
       cpu         = floor(3 * var.cpu / 4)
@@ -25,7 +25,7 @@ locals {
       ulimits     = null
     },
     {
-      tag       = "7.4.12"
+      tag         = "7.4.12"
       name        = "frontend"
       mem         = floor(1 * var.memory / 4)
       cpu         = floor(1 * var.cpu / 4)
@@ -107,10 +107,10 @@ module "ecs" {
   # Set the certificate if it is supplied, otherwise use the self-signed one.
   certificate_arn = var.certificate_arn == "" ? aws_acm_certificate.alb[0].arn : var.certificate_arn
 
-  aws_region           = var.aws_region
-  associate_alb        = true
-  aws_ecs_cluster      = aws_ecs_cluster.main
-  services             = local.services
+  aws_region      = var.aws_region
+  associate_alb   = true
+  aws_ecs_cluster = aws_ecs_cluster.main
+  services        = local.services
 
   ecs_vpc_id          = var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id
   ecs_private_subnets = var.vpc_id == null ? module.vpc[0].private_subnets : var.private_subnets
