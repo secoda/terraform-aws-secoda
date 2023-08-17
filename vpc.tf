@@ -16,7 +16,7 @@ module "vpc" {
 
   count   = var.vpc_id == null ? 1 : 0
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.1.1"
+  version = "4.0.2"
 
   name = var.name
   cidr = var.cidr
@@ -48,6 +48,6 @@ module "vpc" {
 }
 
 resource "aws_eip" "nat" {
-  count  = var.vpc_id == null ? 1 : 0
-  domain = "vpc"
+  count = var.vpc_id == null ? 1 : 0
+  vpc   = true
 }
