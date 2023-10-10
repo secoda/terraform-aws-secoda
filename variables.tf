@@ -179,6 +179,21 @@ variable "proxy_public_key" {
   default = ""
 }
 
+variable "proxy_port" {
+  type    = number
+  default = 22
+}
+
+variable "proxy_eip" {
+  type    = bool
+  default = false
+}
+
+variable "proxy_private_ip" {
+  type    = string
+  default = null
+}
+
 variable "add_environment_vars" {
   type = list(object({
     name  = string

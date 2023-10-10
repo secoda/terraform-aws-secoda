@@ -13,6 +13,8 @@ module "proxy" {
   vpc_id                      = module.vpc[0].vpc_id
   subnet                      = module.vpc[0].public_subnets[0]
   associate_public_ip_address = true
+  assign_eip_address          = var.proxy_eip
+  private_ip                  = var.proxy_private_ip
   name                        = local.proxy_name
   namespace                   = local.namespace
   stage                       = local.stage
@@ -25,10 +27,19 @@ module "proxy" {
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
     },
+    # Allow inbound from the local VPC to the bastion.
     {
       type        = "ingress"
-      from_port   = 22
-      to_port     = 22
+      from_port   = 0
+      to_port     = 65535
+      protocol    = "tcp"
+      cidr_blocks = [var.vpc_id == null ? module.vpc[0].vpc_cidr_block : data.aws_vpc.override[0].cidr_block]
+    },
+    # Allow limited public access to the bastion.
+    {
+      type        = "ingress"
+      from_port   = var.proxy_port
+      to_port     = var.proxy_port
       protocol    = "tcp"
       cidr_blocks = [var.proxy_inbound_cidr]
     }
