@@ -13,6 +13,16 @@ variable "backup_name" {
   default = null
 }
 
+variable "proxy_instance_ami_arch" {
+  type    = string
+  default = "ARM64"
+}
+
+variable "proxy_instance_type" {
+  type    = string
+  default = "t4g.nano"
+}
+
 variable "cpu_architecture" {
   description = "Architecture for fargate instance."
   default     = "X86_64"
@@ -177,6 +187,21 @@ variable "proxy_inbound_cidr" {
 variable "proxy_public_key" {
   type    = string
   default = ""
+}
+
+variable "proxy_port" {
+  type    = number
+  default = 22
+}
+
+variable "proxy_eip" {
+  type    = bool
+  default = false
+}
+
+variable "proxy_private_ip" {
+  type    = string
+  default = null
 }
 
 variable "add_environment_vars" {
