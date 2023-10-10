@@ -25,10 +25,19 @@ module "proxy" {
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
     },
+    # Allow inbound from the local VPC to the bastion.
     {
       type        = "ingress"
-      from_port   = 22
-      to_port     = 22
+      from_port   = 0
+      to_port     = 65535
+      protocol    = "tcp"
+      cidr_blocks = [var.vpc_id == null ? module.vpc[0].vpc_cidr_block : data.aws_vpc.override[0].cidr_block]
+    },
+    # Allow limited public access to the bastion.
+    {
+      type        = "ingress"
+      from_port   = var.proxy_port
+      to_port     = var.proxy_port
       protocol    = "tcp"
       cidr_blocks = [var.proxy_inbound_cidr]
     }

@@ -179,6 +179,11 @@ variable "proxy_public_key" {
   default = ""
 }
 
+variable "proxy_port" {
+  type    = number
+  default = 22
+}
+
 variable "add_environment_vars" {
   type = list(object({
     name  = string
