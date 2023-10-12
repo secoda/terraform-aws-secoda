@@ -13,6 +13,11 @@ variable "backup_name" {
   default = null
 }
 
+variable "proxy_instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+
 variable "cpu_architecture" {
   description = "Architecture for fargate instance."
   default     = "X86_64"

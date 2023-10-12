@@ -13,6 +13,7 @@ module "proxy" {
   vpc_id                      = module.vpc[0].vpc_id
   subnet                      = module.vpc[0].public_subnets[0]
   associate_public_ip_address = true
+  instance_type               = var.proxy_instance_type
   assign_eip_address          = var.proxy_eip
   private_ip                  = var.proxy_private_ip
   name                        = local.proxy_name
