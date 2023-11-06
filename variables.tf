@@ -204,6 +204,11 @@ variable "proxy_private_ip" {
   default = null
 }
 
+variable "proxy_user_data" {
+  type    = string
+  default = null
+}
+
 variable "add_environment_vars" {
   type = list(object({
     name  = string
