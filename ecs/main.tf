@@ -519,7 +519,7 @@ resource "aws_ecs_task_definition" "main" {
             {
               "name": "AWS_ACCOUNT_ID",
               "value": data.aws_caller_identity.current.account_id,
-            }
+            },
             var.add_environment_vars
           ])
 
