@@ -516,6 +516,10 @@ resource "aws_ecs_task_definition" "main" {
               "name" : "APISERVICE_DATABASE_CONNECTION",
               "value" : "postgresql://keycloak:${var.keycloak_database_password}@${var.db_addr}:5432/secoda",
             },
+            {
+              "name": "AWS_ACCOUNT_ID",
+              "value": data.aws_caller_identity.current.account_id,
+            }
             var.add_environment_vars
           ])
 
