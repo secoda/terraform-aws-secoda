@@ -22,7 +22,13 @@ locals {
         "startPeriod" : 60
       }
       mountPoints = null
-      ulimits     = null
+      ulimits     = [
+        {
+          "name" : "core",
+          "softLimit" : 0,
+          "hardLimit" : 0
+        }
+      ]
     },
     {
       tag       = "7.11.0"
