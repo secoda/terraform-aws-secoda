@@ -22,7 +22,6 @@ locals {
         "startPeriod" : 60
       }
       mountPoints = null
-      ulimits     = null
     },
     {
       tag       = "7.11.0"
@@ -51,7 +50,6 @@ locals {
         "startPeriod" : 60
       }
       mountPoints = null
-      ulimits     = null
     }
   ])
 }

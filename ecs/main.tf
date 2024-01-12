@@ -535,7 +535,13 @@ resource "aws_ecs_task_definition" "main" {
 
           volumesFrom = []
 
-          ulimits = s.ulimits
+          ulimits     = [
+            {
+              "name" : "core"
+              "softLimit" : 0
+              "hardLimit" : 0
+            }
+          ]
 
           logConfiguration = {
             logDriver = "awslogs"

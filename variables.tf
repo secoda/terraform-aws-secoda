@@ -254,12 +254,6 @@ variable "services" {
       sourceVolume  = string
       containerPath = string
     }))
-
-    ulimits = list(object({
-      name      = string
-      hardLimit = number
-      softLimit = number
-    }))
   }))
 
   default = null
