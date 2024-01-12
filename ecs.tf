@@ -1,7 +1,7 @@
 locals {
   services = tolist([
     {
-      tag       = "7.11.0"
+      tag       = "7.11.1"
       name        = "api"
       mem         = floor(3 * var.memory / 4)
       cpu         = floor(3 * var.cpu / 4)
@@ -31,7 +31,7 @@ locals {
       ]
     },
     {
-      tag       = "7.11.0"
+      tag       = "7.11.1"
       name        = "frontend"
       mem         = floor(1 * var.memory / 4)
       cpu         = floor(1 * var.cpu / 4)
