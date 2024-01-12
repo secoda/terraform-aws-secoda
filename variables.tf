@@ -5,7 +5,7 @@ variable "cpu" {
 
 variable "memory" {
   type    = number
-  default = 8192
+  default = 16384
 }
 
 variable "backup_name" {
