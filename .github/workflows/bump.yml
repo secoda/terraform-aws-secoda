@@ -25,6 +25,13 @@ jobs:
             sed -i "s/tag\s*=\s*\"[0-9.]*\"/tag       = \"${{ steps.set_version.outputs.version }}\"/g" "$file"
           done
 
+      - name: Update README version
+        id: update_hcl_code
+        run: |
+          file="README.md"
+          echo "Updating $file"
+          sed -i "s/version\s*=\s*\"[0-9.]*\"/version     = \"${{ steps.set_version.outputs.version }}\"/g" "$file"
+
       - name: Commit and Push Changes
         id: commit_and_push
         run: |
