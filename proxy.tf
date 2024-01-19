@@ -8,7 +8,7 @@ locals {
 data "aws_ami" "arm64" {
   most_recent = true
   filter {
-    name ="creation-date"
+    name   = "creation-date"
     values = ["2023-10-31*"]
   }
   filter {
@@ -26,7 +26,7 @@ data "aws_ami" "arm64" {
 data "aws_ami" "amd64" {
   most_recent = true
   filter {
-    name ="creation-date"
+    name   = "creation-date"
     values = ["2023-10-31*"]
   }
   filter {

@@ -463,7 +463,7 @@ resource "aws_ecs_task_definition" "main" {
             "credentialsParameter" : "${var.ssm_docker}"
           }
 
-          cpu               = tonumber(s.cpu),
+          cpu               = tonumber(s.cpu)
           memoryReservation = tonumber(s.mem)
           essential         = tobool(s.essential)
 
@@ -499,12 +499,12 @@ resource "aws_ecs_task_definition" "main" {
               "value" : random_uuid.api_secret.result,
             },
             {
-              name  = "PRIVATE_KEY"
-              value = base64encode(tls_private_key.jwt.private_key_pem)
+              name  = "PRIVATE_KEY",
+              value = base64encode(tls_private_key.jwt.private_key_pem),
             },
             {
-              name  = "PUBLIC_KEY"
-              value = base64encode(tls_private_key.jwt.public_key_pem)
+              name  = "PUBLIC_KEY",
+              value = base64encode(tls_private_key.jwt.public_key_pem),
             },
             {
               "name" : "PRIVATE_BUCKET", # This is where all the private files will be stored.
@@ -519,10 +519,10 @@ resource "aws_ecs_task_definition" "main" {
               "value" : "postgresql://keycloak:${var.keycloak_database_password}@${var.db_addr}:5432/secoda",
             },
             {
-              "name": "AWS_ACCOUNT_ID",
-              "value": data.aws_caller_identity.current.account_id,
+              "name" : "AWS_ACCOUNT_ID",
+              "value" : data.aws_caller_identity.current.account_id,
             },
-            var.add_environment_vars
+            var.add_environment_vars,
           ])
 
           command = s.command
@@ -535,7 +535,7 @@ resource "aws_ecs_task_definition" "main" {
 
           volumesFrom = []
 
-          ulimits     = [
+          ulimits = [
             {
               "name" : "core"
               "softLimit" : 0
