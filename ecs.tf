@@ -1,13 +1,11 @@
 locals {
   services = tolist([
     {
-      tag       = "7.11.3"
       name        = "api"
       mem         = floor(3 * var.memory / 4)
       cpu         = floor(3 * var.cpu / 4)
       ports       = [5007]
       essential   = true
-      image       = false
       environment = []
       command     = null
       dependsOn   = []
@@ -24,13 +22,11 @@ locals {
       mountPoints = null
     },
     {
-      tag       = "7.11.3"
       name        = "frontend"
       mem         = floor(1 * var.memory / 4)
       cpu         = floor(1 * var.cpu / 4)
       ports       = [443]
       essential   = true
-      image       = false
       environment = []
       command     = null
       dependsOn = [
@@ -74,10 +70,12 @@ resource "random_password" "keycloak_database" {
 module "ecs" {
   source = "./ecs/"
 
-  cpu_architecture = var.cpu_architecture
+  repository_prefix = var.repository_prefix
+  cpu_architecture  = var.cpu_architecture
 
   cpu    = var.cpu
   memory = var.memory
+  tag    = var.tag
 
   depends_on = [
     aws_db_instance.postgres, # Must wait for database to spin up to run migrations.

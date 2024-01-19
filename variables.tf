@@ -220,16 +220,23 @@ variable "add_environment_vars" {
   ]
 }
 
+variable "repository_prefix" {
+  type    = string
+  default = "secoda/on-premise"
+}
+
+variable "tag" {
+  default = "7.11.5"
+  type    = string
+}
+
 variable "services" {
   type = list(object({
-    tag       = string
     name      = string
     mem       = number
     cpu       = number
     ports     = list(number)
     essential = bool
-    image     = bool
-    image_id  = optional(string)
     environment = list(object({
       name  = string
       value = string
