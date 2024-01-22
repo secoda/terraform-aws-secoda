@@ -225,6 +225,11 @@ variable "repository_prefix" {
   default = "secoda/on-premise"
 }
 
+variable "tag" {
+  type    = string
+  default = "7.11.5"
+}
+
 variable "services" {
   type = list(object({
     tag       = string

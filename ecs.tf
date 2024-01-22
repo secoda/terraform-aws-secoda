@@ -1,7 +1,6 @@
 locals {
   services = tolist([
     {
-      tag         = "7.11.5"
       name        = "api"
       mem         = floor(3 * var.memory / 4)
       cpu         = floor(3 * var.cpu / 4)
@@ -23,7 +22,6 @@ locals {
       mountPoints = null
     },
     {
-      tag         = "7.11.5"
       name        = "frontend"
       mem         = floor(1 * var.memory / 4)
       cpu         = floor(1 * var.cpu / 4)
@@ -77,6 +75,7 @@ module "ecs" {
 
   cpu    = var.cpu
   memory = var.memory
+  tag = var.tag
 
   depends_on = [
     aws_db_instance.postgres, # Must wait for database to spin up to run migrations.

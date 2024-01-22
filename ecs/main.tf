@@ -457,7 +457,7 @@ resource "aws_ecs_task_definition" "main" {
         {
 
           name  = s.name
-          image = "${var.repository_prefix}-${s.name}:${s.tag}"
+          image = "${var.repository_prefix}-${s.name}:${var.tag}"
 
           "repositoryCredentials" = {
             "credentialsParameter" : "${var.ssm_docker}"

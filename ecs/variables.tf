@@ -90,6 +90,10 @@ variable "add_environment_vars" {
   default = []
 }
 
+variable "tag" {
+  type = string
+}
+
 variable "repository_prefix" {
   type    = string
   default = "secoda/on-premise"
