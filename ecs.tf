@@ -73,8 +73,7 @@ module "ecs" {
   source = "./ecs/"
 
   repository_prefix = var.repository_prefix
-
-  cpu_architecture = var.cpu_architecture
+  cpu_architecture  = var.cpu_architecture
 
   cpu    = var.cpu
   memory = var.memory
