@@ -7,7 +7,6 @@ locals {
       cpu         = floor(3 * var.cpu / 4)
       ports       = [5007]
       essential   = true
-      image       = false
       environment = []
       command     = null
       dependsOn   = []
@@ -30,7 +29,6 @@ locals {
       cpu         = floor(1 * var.cpu / 4)
       ports       = [443]
       essential   = true
-      image       = false
       environment = []
       command     = null
       dependsOn = [
@@ -73,6 +71,8 @@ resource "random_password" "keycloak_database" {
 
 module "ecs" {
   source = "./ecs/"
+
+  repository_prefix = var.repository_prefix
 
   cpu_architecture = var.cpu_architecture
 
