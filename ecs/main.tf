@@ -457,7 +457,7 @@ resource "aws_ecs_task_definition" "main" {
         {
 
           name  = s.name
-          image = s.image ? s.image_id : "secoda/on-premise-${s.name}:${s.tag}"
+          image = "${var.repository_prefix}-${s.name}:${s.tag}"
 
           "repositoryCredentials" = {
             "credentialsParameter" : "${var.ssm_docker}"
