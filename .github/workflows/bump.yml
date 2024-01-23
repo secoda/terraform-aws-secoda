@@ -21,7 +21,7 @@ jobs:
         id: update_hcl_code
         run: |
           file="variables.tf"
-          sed -i '/variable "tag" {/,/}/s/default = "7.11.5"/default = \"${{ steps.set_version.outputs.version }}\"/'
+          sed -i '/variable "tag" {/,/}/s/default = ".*"/default = \"${{ steps.set_version.outputs.version }}\"/'
 
       - name: Update README version
         id: update_readme_version
