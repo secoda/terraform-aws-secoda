@@ -101,7 +101,6 @@ variable "repository_prefix" {
 
 variable "services" {
   type = list(object({
-    tag       = string
     name      = string
     mem       = number
     cpu       = number

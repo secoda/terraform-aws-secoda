@@ -226,13 +226,12 @@ variable "repository_prefix" {
 }
 
 variable "tag" {
-  type    = string
   default = "7.11.5"
+  type    = string
 }
 
 variable "services" {
   type = list(object({
-    tag       = string
     name      = string
     mem       = number
     cpu       = number

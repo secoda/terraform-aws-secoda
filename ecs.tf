@@ -75,7 +75,7 @@ module "ecs" {
 
   cpu    = var.cpu
   memory = var.memory
-  tag = var.tag
+  tag    = var.tag
 
   depends_on = [
     aws_db_instance.postgres, # Must wait for database to spin up to run migrations.

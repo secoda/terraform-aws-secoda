@@ -20,9 +20,14 @@ jobs:
       - name: Update HCL Code
         id: update_hcl_code
         run: |
-          find . -type f -name '*.tf'  -not -path '*.terraform/*' | while read -r file; do
+          find . -type f -name '*.tf' -not -path '*.terraform/*' | while read -r file; do
             echo "Updating $file"
-            sed -i "s/tag\s*=\s*\"[0-9.]*\"/tag       = \"${{ steps.set_version.outputs.version }}\"/g" "$file"
+
+            sed -i "
+            /tag/{
+              s/default = \"\w\+\"/default = \"${{ steps.set_version.outputs.version }}\" \}/
+            }
+            " "$file"
           done
 
       - name: Update README version
