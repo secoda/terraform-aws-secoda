@@ -44,7 +44,7 @@ data "aws_ami" "amd64" {
 module "proxy" {
   count                       = var.proxy_instance ? 1 : 0
   source                      = "cloudposse/ec2-instance/aws"
-  version                     = "1.1.0"
+  version                     = ">= 1.1.0"
   ssh_key_pair                = aws_key_pair.proxy[0].key_name
   vpc_id                      = module.vpc[0].vpc_id
   subnet                      = module.vpc[0].public_subnets[0]
