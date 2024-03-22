@@ -1,6 +1,6 @@
 module "backup" {
   source           = "cloudposse/backup/aws"
-  version          = ">= 0.14.0, < 2.0.0"
+  version          = "~> 1.0"
   stage            = var.backup_name == null ? terraform.workspace : var.backup_name
   name             = var.name
   backup_resources = [aws_db_instance.postgres.arn]
