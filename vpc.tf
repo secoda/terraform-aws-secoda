@@ -16,7 +16,7 @@ module "vpc" {
 
   count   = var.vpc_id == null ? 1 : 0
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.1.1"
+  version = "~> 5.1"
 
   name = var.name
   cidr = var.cidr

@@ -8,7 +8,7 @@ module "this" {
 
 module "redis" {
   source  = "cloudposse/elasticache-redis/aws"
-  version = "0.51.1"
+  version = "~> 1.0"
 
   parameter = [
     {

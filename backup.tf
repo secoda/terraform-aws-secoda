@@ -1,14 +1,19 @@
 module "backup" {
-  source            = "cloudposse/backup/aws"
-  version           = "0.12.0"
-  stage             = var.backup_name == null ? terraform.workspace : var.backup_name
-  name              = var.name
-  backup_resources  = [aws_db_instance.postgres.arn]
-  not_resources     = []
-  schedule          = "cron(0 5 * * ? *)"
-  start_window      = 120
-  completion_window = 720
-  delete_after      = 30
+  source           = "cloudposse/backup/aws"
+  version          = "~> 1.0"
+  stage            = var.backup_name == null ? terraform.workspace : var.backup_name
+  name             = var.name
+  backup_resources = [aws_db_instance.postgres.arn]
+  not_resources    = []
+  rules = [
+    {
+      name              = "secoda-db-daily"
+      schedule          = "cron(0 5 * * ? *)"
+      start_window      = 120
+      completion_window = 720
+      delete_after      = 30
+    }
+  ]
 }
 
 resource "aws_backup_vault_lock_configuration" "backup_lock" {
