@@ -8,6 +8,16 @@ variable "memory" {
   default = 16384
 }
 
+variable "rds_max_storage" {
+  type    = number
+  default = 256
+}
+
+variable "rds_allocated_storage" {
+  type    = number
+  default = 38
+}
+
 variable "backup_name" {
   type    = string
   default = null

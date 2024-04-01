@@ -10,8 +10,8 @@ locals {
 
 resource "aws_db_instance" "postgres" {
   performance_insights_enabled = var.performance_insights_enabled
-  max_allocated_storage        = 256
-  allocated_storage            = 12
+  max_allocated_storage        = var.rds_max_storage
+  allocated_storage            = var.rds_allocated_storage
   engine                       = "postgres"
   engine_version               = var.database_version
   instance_class               = var.rds_instance_type
