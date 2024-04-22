@@ -15,7 +15,7 @@ resource "random_password" "es" {
 
 resource "aws_opensearch_domain" "es" {
   domain_name    = var.name
-  engine_version = "OpenSearch_2.5"
+  engine_version = "OpenSearch_2.11"
 
   ebs_options {
     ebs_enabled = true
