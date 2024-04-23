@@ -1,0 +1,28 @@
+name: Update HCL Code and Create Release
+
+on:
+  repository_dispatch:
+    types:
+      - version
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Version
+        id: set_version
+        run: echo "::set-output name=version::${{ github.event.client_payload.version }}"
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          commitish: main
+          tag_name: v${{ steps.set_version.outputs.version }}
+          release_name: v${{ steps.set_version.outputs.version }}
+          draft: false
