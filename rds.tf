@@ -25,7 +25,7 @@ resource "aws_db_instance" "postgres" {
   backup_window                = "10:00-11:00"
   backup_retention_period      = 21
   db_subnet_group_name         = var.database_subnet_group_name != null ? var.database_subnet_group_name : var.name
-  vpc_security_group_ids       = concat([aws_security_group.keycloak-security-group.id], var.proxy_instance ? [aws_security_group.cidr_rds_security_group[0].id] : [])
+  vpc_security_group_ids       = concat([aws_security_group.keycloak-security-group.id], (var.proxy_instance || var.enable_cidr_ingress) ? [aws_security_group.cidr_rds_security_group[0].id] : [])
   storage_encrypted            = true
   auto_minor_version_upgrade   = false # We recommend you do not upgrade the database version automatically, as it will put the database out-of-sync with the terraform.
 

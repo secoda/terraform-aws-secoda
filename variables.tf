@@ -184,6 +184,11 @@ variable "rds_instance_type" {
   default = "db.t4g.small"
 }
 
+variable "enable_cidr_ingress" {
+  type = bool
+  default = false
+}
+
 variable "proxy_instance" {
   type    = bool
   default = false
