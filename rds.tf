@@ -72,7 +72,7 @@ resource "aws_security_group" "keycloak-security-group" {
 
 resource "aws_security_group" "cidr_rds_security_group" {
   name   = "${local.name}-cidr-rds-security-group"
-  count  = var.proxy_instance ? 1 : 0
+  count  = (var.proxy_instance || var.enable_cidr_ingress) ? 1 : 0
   vpc_id = var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id
 
   ingress {
