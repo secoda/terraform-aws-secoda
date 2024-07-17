@@ -88,7 +88,7 @@ variable "performance_insights_enabled" {
 
 variable "database_version" {
   type    = string
-  default = "14.11"
+  default = "14.12"
 }
 
 variable "database_subnets" {
