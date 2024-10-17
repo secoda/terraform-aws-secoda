@@ -185,7 +185,7 @@ variable "rds_instance_type" {
 }
 
 variable "enable_cidr_ingress" {
-  type = bool
+  type    = bool
   default = false
 }
 
