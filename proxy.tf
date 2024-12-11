@@ -8,12 +8,8 @@ locals {
 data "aws_ami" "arm64" {
   most_recent = true
   filter {
-    name   = "creation-date"
-    values = ["2023-10-31*"]
-  }
-  filter {
     name   = "name"
-    values = ["ubuntu/images/*23.04-arm64-server-*"]
+    values = ["ubuntu/images/*24.10-arm64-server-*"]
   }
   filter {
     name   = "virtualization-type"
@@ -26,12 +22,8 @@ data "aws_ami" "arm64" {
 data "aws_ami" "amd64" {
   most_recent = true
   filter {
-    name   = "creation-date"
-    values = ["2023-10-31*"]
-  }
-  filter {
     name   = "name"
-    values = ["ubuntu/images/*23.04-amd64-server-*"]
+    values = ["ubuntu/images/*24.10-amd64-server-*"]
   }
   filter {
     name   = "virtualization-type"
