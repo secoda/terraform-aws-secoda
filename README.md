@@ -3,7 +3,7 @@
 ```hcl
 module "secoda" {
   source  = "secoda/secoda/aws"
-  version     = "2025.1.8"
+  version     = "2025.1.9"
 
   name        = "secoda"
   environment = "production"
