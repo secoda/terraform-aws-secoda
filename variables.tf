@@ -241,7 +241,7 @@ variable "repository_prefix" {
 }
 
 variable "tag" {
-  default = "2025.1.11"
+  default = "2025.1.12"
   type    = string
 }
 
