@@ -5,11 +5,13 @@ module "backup" {
   name             = var.name
   backup_resources = [aws_db_instance.postgres.arn]
   not_resources    = []
+  
   backup_vault_lock_configuration = {
     changeable_for_days = 7
-    max_retention_days  = 365
-    min_retention_days  = 30
+    max_retention_days  = 60
+    min_retention_days  = 14
   }
+
   rules = [
     {
       name = "secoda-db-daily"
