@@ -5,7 +5,7 @@ module "backup" {
   name             = var.name
   backup_resources = [aws_db_instance.postgres.arn]
   not_resources    = []
-  
+
   backup_vault_lock_configuration = {
     changeable_for_days = 7
     max_retention_days  = 60
@@ -18,7 +18,9 @@ module "backup" {
       schedule : "cron(0 5 ? * * *)"
       start_window      = 320
       completion_window = 10080
-      delete_after      = 35
+      lifecycle = {
+        delete_after = 30
+      }
     }
   ]
 }
