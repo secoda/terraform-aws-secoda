@@ -11,7 +11,7 @@ locals {
   # Configures two services:
   # 1. API service (75% of resources)
   # 2. Frontend service (25% of resources)
-  services = try(var.services, tolist([
+  services = coalesce(var.services, tolist([
     {
       name        = "api"
       mem         = floor(3 * var.memory / 4)  # Allocates 75% of total memory
