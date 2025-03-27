@@ -24,16 +24,16 @@ output "ecs_service_id" {
 }
 
 output "aws_lb_dns" {
-  description = "ARN of the lb."
-  value       = aws_lb.main[0].dns_name
+  description = "DNS name of the load balancer, or null if no ALB is associated"
+  value       = try(aws_lb.main[0].dns_name, null)
 }
 
 output "aws_lb_zone_id" {
-  description = "ARN of the lb."
-  value       = aws_lb.main[0].zone_id
+  description = "Zone ID of the load balancer, or null if no ALB is associated"
+  value       = try(aws_lb.main[0].zone_id, null)
 }
 
 output "aws_lb_arn" {
-  description = "ARN of the lb."
-  value       = aws_lb.main[0].arn
+  description = "ARN of the load balancer, or null if no ALB is associated"
+  value       = try(aws_lb.main[0].arn, null)
 }

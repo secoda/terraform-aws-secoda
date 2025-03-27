@@ -60,7 +60,7 @@ module "ecs" {
 
   # AWS specific configurations
   aws_region      = var.aws_region
-  associate_alb   = true
+  associate_alb   = var.associate_alb
   aws_ecs_cluster = aws_ecs_cluster.main
   core_services   = var.core_services
   custom_services = var.custom_services

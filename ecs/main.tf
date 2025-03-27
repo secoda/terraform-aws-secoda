@@ -1,6 +1,15 @@
 data "aws_caller_identity" "current" {}
 
 ################################################################################
+# Local Variables
+################################################################################
+
+# If custom services are not provided, use an empty list.
+locals {
+  custom_services = var.custom_services != null ? var.custom_services : []
+}
+
+################################################################################
 # ECS
 ################################################################################
 
@@ -45,6 +54,8 @@ locals {
 ################################################################################
 
 module "aws-alb-alarms" {
+  count = var.associate_alb ? 1 : 0
+
   source           = "../alarms"
   load_balancer_id = aws_lb.main[0].id
   target_group_id  = aws_lb_target_group.https[0].id
@@ -404,10 +415,13 @@ resource "aws_ecs_service" "main" {
     assign_public_ip = var.assign_public_ip
   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.https[0].arn
-    container_name   = local.target_container_name
-    container_port   = var.container_port
+  dynamic "load_balancer" {
+    for_each = var.associate_alb ? [1] : []
+    content {
+      target_group_arn = aws_lb_target_group.https[0].arn
+      container_name   = local.target_container_name
+      container_port   = var.container_port
+    }
   }
 
   health_check_grace_period_seconds = var.health_check_grace_period_seconds
@@ -434,7 +448,7 @@ resource "aws_ecs_task_definition" "main" {
   requires_compatibilities = ["FARGATE"]
 
   runtime_platform {
-    cpu_architecture        = var.total_cpu_architecture
+    cpu_architecture        = var.cpu_architecture
     operating_system_family = "LINUX"
   }
 
@@ -463,8 +477,8 @@ resource "aws_ecs_task_definition" "main" {
               "credentialsParameter" : "${var.ssm_docker}"
             }
 
-            cpu               = ceil(floor((var.total_cpu - sum([for s in var.custom_services : try(s.cpu, 0)])) * service.preferred_cpu_percentage / 100) / 128) * 128
-            memoryReservation = floor((var.total_memory - sum([for s in var.custom_services : try(s.memoryReservation, 0)])) * service.preferred_memory_percentage / 100)
+            cpu               = ceil(floor((var.total_cpu - sum([for s in local.custom_services : try(s.cpu, 0)])) * service.preferred_cpu_percentage / 100) / 128) * 128
+            memoryReservation = floor((var.total_memory - sum([for s in local.custom_services : try(s.memoryReservation, 0)])) * service.preferred_memory_percentage / 100)
             essential         = tobool(service.essential)
 
             requires_compatibilities = ["FARGATE"]
@@ -554,7 +568,7 @@ resource "aws_ecs_task_definition" "main" {
           }
         )
       ],
-      var.custom_services
+      local.custom_services
     )
   ))
 

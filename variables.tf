@@ -174,6 +174,11 @@ variable "internal" {
   default = false
 }
 
+variable "associate_alb" {
+  type    = bool
+  default = true
+}
+
 variable "certificate_arn" {
   type    = string
   default = ""
@@ -319,35 +324,54 @@ variable "core_services" {
 }
 
 variable "custom_services" {
-  description = "Configuration for additional custom services to run alongside core services in ECS tasks"
   type = list(object({
-    name      = string
-    mem       = number
-    cpu       = number
-    ports     = list(number)
-    essential = bool
-    environment = list(object({
+    name             = string
+    image            = string
+    cpu              = optional(number)
+    memory           = optional(number)
+    essential        = optional(bool)
+    entryPoint       = optional(list(string))
+    command          = optional(list(string))
+    workingDirectory = optional(string)
+    environment = optional(list(object({
       name  = string
       value = string
-    }))
-    command = list(string)
-    dependsOn = list(object({
-      containerName = string
-      condition     = string
-    }))
-    healthCheck = object({
-      command     = list(string)
-      retries     = number
-      timeout     = number
-      interval    = number
-      startPeriod = number
-    })
-    mountPoints = list(object({
+    })))
+    environmentFiles = optional(list(object({
+      value = string
+      type  = string
+    })))
+    secrets = optional(list(object({
+      name      = string
+      valueFrom = string
+    })))
+    mountPoints = optional(list(object({
       sourceVolume  = string
       containerPath = string
+      readOnly      = optional(bool)
+    })))
+    volumesFrom = optional(list(object({
+      sourceContainer = string
+      readOnly        = optional(bool)
+    })))
+    portMappings = optional(list(object({
+      containerPort = number
+      hostPort      = optional(number)
+      protocol      = optional(string)
+    })))
+    healthCheck = optional(object({
+      command     = list(string)
+      interval    = optional(number)
+      timeout     = optional(number)
+      retries     = optional(number)
+      startPeriod = optional(number)
+    }))
+    logConfiguration = optional(object({
+      logDriver = string
+      options   = map(string)
     }))
   }))
-  default = []
+  default = null
 }
 
 ################################################################################

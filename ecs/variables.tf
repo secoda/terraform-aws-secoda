@@ -156,7 +156,7 @@ variable "custom_services" {
       options   = map(string)
     }))
   }))
-  default     = []
+  default     = null
   description = "List of custom container definitions that conform to AWS ECS container definition schema"
 }
 

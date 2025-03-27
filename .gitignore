@@ -19,8 +19,7 @@ terraform.rc
 
 .terraform.lock.hcl
 
-onprem.tfvars
-secoda.onprem.tfvars
+*.tfvars
 
 .terraform
 
