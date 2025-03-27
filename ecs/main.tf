@@ -477,8 +477,8 @@ resource "aws_ecs_task_definition" "main" {
               "credentialsParameter" : "${var.ssm_docker}"
             }
 
-            cpu               = floor(floor((var.total_cpu - sum([for s in local.custom_services : try(s.cpu, 0)])) * service.preferred_cpu_percentage / 100) / 128) * 128
-            memoryReservation = floor(floor((var.total_memory - sum([for s in local.custom_services : try(s.memoryReservation, 0)])) * service.preferred_memory_percentage / 100) / 128) * 128
+            cpu               = floor(floor((var.total_cpu - try(sum([for s in local.custom_services : s.cpu]), 0)) * service.preferred_cpu_percentage / 100) / 128) * 128
+            memoryReservation = floor(floor((var.total_memory - try(sum([for s in local.custom_services : s.memoryReservation]), 0)) * service.preferred_memory_percentage / 100) / 128) * 128
             essential         = tobool(service.essential)
 
             requires_compatibilities = ["FARGATE"]
