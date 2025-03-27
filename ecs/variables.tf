@@ -110,14 +110,14 @@ variable "aws_ecs_cluster" {
 
 variable "custom_services" {
   type = list(object({
-    name             = string
-    image            = string
-    cpu              = optional(number)
-    memory           = optional(number)
-    essential        = optional(bool)
-    entryPoint       = optional(list(string))
-    command          = optional(list(string))
-    workingDirectory = optional(string)
+    name              = string
+    image             = string
+    cpu               = optional(number)
+    memoryReservation = optional(number)
+    essential         = optional(bool)
+    entryPoint        = optional(list(string))
+    command           = optional(list(string))
+    workingDirectory  = optional(string)
     environment = optional(list(object({
       name  = string
       value = string

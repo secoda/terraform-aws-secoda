@@ -26,3 +26,5 @@ terraform.rc
 custom.secoda-secrets.yaml
 
 .DS_Store
+
+nohup.out
