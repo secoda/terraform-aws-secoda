@@ -1,67 +1,80 @@
 # AWS Terraform
 
+## Quick Start
 ```hcl
 module "secoda" {
-  source  = "secoda/secoda/aws"
+  source      = "secoda/secoda/aws"
   version     = "2025.1.19"
-
   name        = "secoda"
   environment = "production"
-
-  aws_region = "us-east-1"
-
+  aws_region  = "us-east-1"
   docker_password = "" # Must be filled in.
 }
 ```
 
-## Updating to the latest version
+## Setup Guide
 
-1. Pull the latest terraform OR if using Secoda as a terraform module, bump the pinned version. Reapply the terraform.
-2. Wait for a new ECS task to start automatically. Hit the refresh button to check. It should pull the latest version of Secoda.
+### Updating to the Latest Version
+1. Pull the latest terraform OR if using Secoda as a terraform module, bump the pinned version
+2. Reapply the terraform
+3. Wait for a new ECS task to start automatically (use refresh button to check)
 
-## SSO Options
-
+### SSO Configuration
+Supported providers:
 - Google
 - Microsoft
 - Okta
 - OneLogin
 - SAML2.0
 
-## Troubleshooting / FAQ
-
-`MalformedPolicyDocumentException: Policy contains a statement with one or more invalid service principals`: please try using a different AWS administrator account, or create a new one with a different name.
-
-`Subnets can currently only be created in the following availability zones: us-west-1b, us-west-1c`: This is due to using inconsistent regions in the `tfvars` file and the `AWS_REGION` environment variable. Make sure these are consistent.
-
-`Error: error creating ELBv2 Listener (arn:aws:elasticloadbalancing:***): ValidationError: Certificate ARN 'arn:aws:acm:us-west-1:482836992928:certificate/***' is not valid`: This is due to the certificate being in a different region than the deployment.
-
-## Hashicorp Cloud
-
-To store state in Hashicorp cloud, which we recommend, please complete the following steps. You should be a member of a _Terraform Cloud_ account before proceeding.
-
-In this directory, run `terraform login`. In `versions.tf` please uncomment the following lines and replace `secoda` with your organization name.
-
+### Hashicorp Cloud Setup
+1. Ensure you are a member of a _Terraform Cloud_ account
+2. Run `terraform login` in this directory
+3. In `versions.tf`, uncomment and update the following:
 ```yaml
 backend "remote" {
-organization = "secoda"
+    organization = "secoda"  # Replace with your organization name
 }
 ```
 
-## Connecting to the infrastructure
+## Infrastructure Details
 
-- Load balancer is publicly accessible by default (DNS name is returned after running `terraform apply`). There will be a delay on first setup as the registration target happens ~5 minutes.
-- Containers are in private subnets by default. They cannot be accessed from outside the network (VPC). If you need to do maintenance, we suggest using a solution like Tailscale.
-- We suggest using _Cloudflare ZeroTrust_ to limit access to Secoda.
+### Network Access
+- Load balancer: Publicly accessible (DNS name provided after `terraform apply`)
+  - Note: Initial setup has ~5 minute delay for target registration
+- Containers: Located in private subnets (VPC access only)
+  - For maintenance: Consider using Tailscale
+- Recommended: Use _Cloudflare ZeroTrust_ for access control
 
-## Network configuration for integrations
+### Integration Network Configuration
+Default: Secoda runs in a separate VPC
 
-By default, this terraform code will put the on-premise version of Secoda in a separate VPC (#1 below).
+Connection Options:
+1. **Default: VPC to Internet to VPC**
+   - Whitelist and configure NAT Gateway EIP security rules
+   - Works out of the box
 
-There are three different ways of connecting your on-premise integrations to Secoda:
+2. **VPC to VPC**
+   - Uses AWS VPC Peering
+   - Requires manual setup or additional terraform code
+   - Whitelist security rules for AWS VPC network access
 
-1. (Default) Whitelisting and setting up security rules for the NAT Gateway EIP to your resource. **(VPC to Internet to VPC)**
-   - Works OOTB.
-2. AWS VPC Peering and whitelisting security rules for access from the AWS VPC network. **(VPC to VPC)**
-   - Requires manual setup or additional terraform code.
-3. Put Secoda in the same VPC and setup security rules to your resource. **(intra-VPC)**
-   - You can override VPC variables in `onprem.tf` to achieve this.
+3. **Intra-VPC**
+   - Place Secoda in the same VPC as your data integrations (Redshift, Postgres, etc.)
+   - Configure security rules for resource access
+   - Override VPC variables in `onprem.tf`
+
+## Troubleshooting
+
+Common Issues:
+1. **MalformedPolicyDocumentException**
+   - Error: "Policy contains a statement with one or more invalid service principals"
+   - Solution: Use different AWS administrator account or create new one
+
+2. **Subnet Creation Error**
+   - Error: "Subnets can currently only be created in specific availability zones"
+   - Solution: Ensure `tfvars` file and `AWS_REGION` environment variable match
+
+3. **ELBv2 Listener Error**
+   - Error: "Certificate ARN is not valid"
+   - Solution: Verify certificate is in same region as deployment

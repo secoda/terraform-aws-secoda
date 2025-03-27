@@ -1,85 +1,163 @@
-variable "cpu" {
-  type    = number
-  default = 4096
+################################################################################
+# Resource Allocation
+################################################################################
+
+variable "total_cpu" {
+  description = "Total CPU units to allocate for the ECS task (1024 units = 1 vCPU)"
+  type        = number
+  default     = 4096
 }
 
-variable "memory" {
-  type    = number
-  default = 8192
-
+variable "total_memory" {
+  description = "Total memory (in MiB) to allocate for the ECS task"
+  type        = number
+  default     = 8192
 }
 
 ################################################################################
-# Environment Vars
+# Database and Cache Configuration
 ################################################################################
 
 variable "redis_addr" {
-  type = string
+  description = "Redis connection address"
+  type        = string
 }
 
 variable "db_addr" {
-  type = string
+  description = "Database connection address"
+  type        = string
 }
 
 variable "keycloak_database_password" {
+  description = "The password for the Keycloak database"
   type        = string
-  description = "The password for the database."
 }
 
 variable "es_host" {
-  type    = string
-  default = null
+  description = "Elasticsearch host address"
+  type        = string
+  default     = null
 }
 
 variable "es_password" {
-  type    = string
-  default = null
+  description = "Elasticsearch password"
+  type        = string
+  default     = null
 }
 
 ################################################################################
-# S3
+# Storage Configuration
 ################################################################################
 
-variable "s3_resources" { // The private bucket resources.
-  type = list(string)
+variable "s3_resources" {
+  description = "List of S3 resource ARNs for private bucket access"
+  type        = list(string)
 }
 
-variable "private_bucket" { // The private bucket name where application files will be stored.
-  type = string
+variable "private_bucket" {
+  description = "Name of the private S3 bucket where application files will be stored"
+  type        = string
 }
 
 ################################################################################
-# Docker Hub Authentication
+# Container Registry Configuration
 ################################################################################
 
 variable "ssm_docker" {
-  type = string
-}
-
-################################################################################
-# ECS
-################################################################################
-
-variable "cpu_architecture" {
-  description = "Architecture for fargate instance."
-  default     = "X86_64"
+  description = "SSM parameter name containing Docker Hub authentication credentials"
   type        = string
 }
+
+variable "repository_prefix" {
+  description = "Prefix for container image repository path"
+  type        = string
+  default     = "secoda/on-premise"
+}
+
+variable "ecr_repo_arns" {
+  description = "List of ECR repository ARNs to grant access to. Default allows all repositories"
+  type        = list(string)
+  default     = ["*"]
+}
+
+################################################################################
+# ECS Cluster Configuration
+################################################################################
 
 variable "name" {
-  description = "The service name."
+  description = "The service name"
   type        = string
+}
+
+variable "cpu_architecture" {
+  description = "CPU architecture for Fargate instance (X86_64 or ARM64)"
+  type        = string
+  default     = "X86_64"
 }
 
 variable "ecs_sg_id" {
-  type = string
+  description = "Security group ID for the ECS service"
+  type        = string
 }
 
 variable "aws_ecs_cluster" {
+  description = "ECS cluster configuration object"
   type = object({
     name = string
     arn  = string
   })
+}
+
+variable "custom_services" {
+  type = list(object({
+    name              = string
+    image             = string
+    cpu               = optional(number)
+    memoryReservation = optional(number)
+    essential         = optional(bool)
+    entryPoint        = optional(list(string))
+    command           = optional(list(string))
+    workingDirectory  = optional(string)
+    environment = optional(list(object({
+      name  = string
+      value = string
+    })))
+    environmentFiles = optional(list(object({
+      value = string
+      type  = string
+    })))
+    secrets = optional(list(object({
+      name      = string
+      valueFrom = string
+    })))
+    mountPoints = optional(list(object({
+      sourceVolume  = string
+      containerPath = string
+      readOnly      = optional(bool)
+    })))
+    volumesFrom = optional(list(object({
+      sourceContainer = string
+      readOnly        = optional(bool)
+    })))
+    portMappings = optional(list(object({
+      containerPort = number
+      hostPort      = optional(number)
+      protocol      = optional(string)
+    })))
+    healthCheck = optional(object({
+      command     = list(string)
+      interval    = optional(number)
+      timeout     = optional(number)
+      retries     = optional(number)
+      startPeriod = optional(number)
+    }))
+    logConfiguration = optional(object({
+      logDriver = string
+      options   = map(string)
+    }))
+  }))
+  default     = null
+  description = "List of custom container definitions that conform to AWS ECS container definition schema"
 }
 
 variable "add_environment_vars" {
@@ -94,18 +172,13 @@ variable "tag" {
   type = string
 }
 
-variable "repository_prefix" {
-  type    = string
-  default = "secoda/on-premise"
-}
-
-variable "services" {
+variable "core_services" {
   type = list(object({
-    name      = string
-    mem       = number
-    cpu       = number
-    ports     = list(number)
-    essential = bool
+    name                        = string
+    preferred_memory_percentage = number
+    preferred_cpu_percentage    = number
+    ports                       = list(number)
+    essential                   = bool
 
     environment = list(object({
       name  = string
@@ -133,30 +206,69 @@ variable "services" {
   }))
 }
 
+################################################################################
+# Network Configuration
+################################################################################
+
 variable "aws_region" {
-  type    = string
-  default = "us-east-1"
+  description = "AWS region where resources will be created"
+  type        = string
+  default     = "us-east-1"
 }
 
+variable "ecs_vpc_id" {
+  description = "VPC ID where ECS resources will be deployed"
+  type        = string
+}
+
+variable "ecs_private_subnets" {
+  description = "List of private subnet IDs for ECS tasks"
+  type        = list(string)
+}
+
+variable "ecs_public_subnets" {
+  description = "List of public subnet IDs for ECS tasks"
+  type        = list(string)
+}
+
+variable "assign_public_ip" {
+  description = "Whether instances should be accessible from the public internet"
+  type        = bool
+  default     = false
+}
+
+variable "internal" {
+  description = "Whether the load balancer should be internal (private IP)"
+  type        = bool
+  default     = false
+}
+
+################################################################################
+# Load Balancer Configuration
+################################################################################
+
 variable "health_check_url" {
-  type    = string
-  default = "/healthcheck/"
+  description = "URL path for health check endpoint"
+  type        = string
+  default     = "/healthcheck/"
 }
 
 variable "certificate_arn" {
-  type    = string
-  default = ""
+  description = "ARN of the SSL certificate for HTTPS"
+  type        = string
+  default     = ""
 }
 
 variable "enable_https" {
-  default = true
-  type    = bool
+  description = "Whether to enable HTTPS for the service"
+  type        = bool
+  default     = true
 }
 
 variable "cloudwatch_alarm_name" {
-  description = "Generic name used for CPU and Memory Cloudwatch Alarms"
-  default     = ""
+  description = "Base name for CPU and Memory CloudWatch alarms"
   type        = string
+  default     = ""
 }
 
 variable "cloudwatch_alarm_actions" {
@@ -201,12 +313,6 @@ variable "logs_cloudwatch_group" {
   type        = string
 }
 
-variable "ecr_repo_arns" {
-  description = "The ARNs of the ECR repos.  By default, allows all repositories."
-  type        = list(string)
-  default     = ["*"]
-}
-
 variable "ecs_use_fargate" {
   description = "Whether to use Fargate for the task definition."
   default     = false
@@ -219,42 +325,16 @@ variable "ecs_instance_role" {
   type        = string
 }
 
-variable "ecs_vpc_id" {
-  description = "VPC ID to be used by ECS."
-  type        = string
-}
-
-variable "ecs_private_subnets" {
-  description = "Subnet IDs for the ECS tasks."
-  type        = list(string)
-}
-
-variable "ecs_public_subnets" {
-  type = list(string)
-}
-
 variable "ec2_create_task_execution_role" {
   description = "Set to true to create ecs task execution role to ECS EC2 Tasks."
   type        = bool
   default     = true
 }
 
-variable "assign_public_ip" {
-  description = "Whether this instance should be accessible from the public internet. Default is false."
-  default     = false
-  type        = bool
-}
-
-variable "internal" {
-  description = "Whether this instance should have a load balancer that resolves to a private ip address."
-  default     = false
-  type        = bool
-}
-
 variable "fargate_platform_version" {
-  description = "The platform version on which to run your service. Only applicable when using Fargate launch type."
-  default     = "LATEST"
+  description = "Fargate platform version for running the service"
   type        = string
+  default     = "LATEST"
 }
 
 variable "fargate_task_cpu" {
@@ -270,9 +350,9 @@ variable "fargate_task_memory" {
 }
 
 variable "tasks_desired_count" {
-  description = "The number of instances of a task definition."
-  default     = 1
+  description = "Desired number of running task instances"
   type        = number
+  default     = 1
 }
 
 variable "tasks_minimum_healthy_percent" {
@@ -346,7 +426,6 @@ variable "container_port" {
   default     = 443
   description = "Port for the container app to listen on. The app currently supports listening on two ports."
   type        = number
-
 }
 
 variable "service_registries" {

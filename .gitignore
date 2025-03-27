@@ -19,11 +19,12 @@ terraform.rc
 
 .terraform.lock.hcl
 
-onprem.tfvars
-secoda.onprem.tfvars
+*.tfvars
 
 .terraform
 
 custom.secoda-secrets.yaml
 
 .DS_Store
+
+nohup.out

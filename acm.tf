@@ -10,7 +10,7 @@ resource "tls_self_signed_cert" "alb" {
     organization = "Client per Secoda"
   }
 
-  validity_period_hours = 87600 # 10 years.
+  validity_period_hours = 87600 # 10 years
 
   allowed_uses = [
     "key_encipherment",
