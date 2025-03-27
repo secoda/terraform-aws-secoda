@@ -3,66 +3,6 @@
 # a multi-container environment with API and frontend services.
 
 ################################################################################
-# Local Variables
-################################################################################
-
-locals {
-  # Default service definitions for the ECS tasks
-  # Configures two services:
-  # 1. API service (75% of resources)
-  # 2. Frontend service (25% of resources)
-  core_services = [
-    {
-      name        = "api"
-      mem         = floor(3 * var.memory / 4)  # Allocates 75% of total memory
-      cpu         = floor(3 * var.cpu / 4)     # Allocates 75% of total CPU
-      ports       = [5007]
-      essential   = true
-      environment = []
-      command     = null
-      dependsOn   = []
-      healthCheck = {
-        "retries" : 3,
-        "command" : [
-          "CMD-SHELL",
-          "curl -f http://localhost:5007/healthcheck/ || exit 1"
-        ],
-        "timeout" : 5,
-        "interval" : 5,
-        "startPeriod" : 60
-      }
-      mountPoints = null
-    },
-    {
-      name        = "frontend"
-      mem         = floor(1 * var.memory / 4)  # Allocates 25% of total memory
-      cpu         = floor(1 * var.cpu / 4)     # Allocates 25% of total CPU
-      ports       = [443]
-      essential   = true
-      environment = []
-      command     = null
-      dependsOn = [
-        {
-          "containerName" = "api"
-          "condition"     = "HEALTHY"
-        }
-      ]
-      healthCheck = {
-        "retries" : 3,
-        "command" : [
-          "CMD-SHELL",
-          "curl -f http://localhost:5006/healthcheck/ || exit 1"
-        ],
-        "timeout" : 5,
-        "interval" : 5,
-        "startPeriod" : 60
-      }
-      mountPoints = null
-    }
-  ]
-}
-
-################################################################################
 # ECS - Cluster
 ################################################################################
 
@@ -87,11 +27,11 @@ module "ecs" {
   # Basic configuration
   repository_prefix = var.repository_prefix
   cpu_architecture  = var.cpu_architecture
-  cpu              = var.cpu
-  memory           = var.memory
-  tag              = var.tag
-  name             = var.name
-  internal         = var.internal
+  cpu               = var.cpu
+  memory            = var.memory
+  tag               = var.tag
+  name              = var.name
+  internal          = var.internal
 
   # Dependencies and integrations
   depends_on = [
@@ -116,20 +56,20 @@ module "ecs" {
   es_password                = random_password.es.result
   es_host                    = aws_opensearch_domain.es.endpoint
   keycloak_database_password = random_password.keycloak_database.result
-  certificate_arn           = var.certificate_arn == "" ? aws_acm_certificate.alb[0].arn : var.certificate_arn
+  certificate_arn            = var.certificate_arn == "" ? aws_acm_certificate.alb[0].arn : var.certificate_arn
 
   # AWS specific configurations
   aws_region      = var.aws_region
   associate_alb   = true
   aws_ecs_cluster = aws_ecs_cluster.main
-  core_services   = local.core_services
+  core_services   = var.core_services
   custom_services = var.custom_services
 
   # Network configurations
   ecs_vpc_id          = var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id
   ecs_private_subnets = var.vpc_id == null ? module.vpc[0].private_subnets : var.private_subnets
   ecs_public_subnets  = var.vpc_id == null ? module.vpc[0].public_subnets : var.public_subnets
-  ecs_sg_id          = aws_security_group.ecs_sg.id
+  ecs_sg_id           = aws_security_group.ecs_sg.id
 
   add_environment_vars = var.add_environment_vars
 }
