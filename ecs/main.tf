@@ -447,112 +447,115 @@ resource "aws_ecs_task_definition" "main" {
 
   # Use the `nonsensitive()` operator to view the diff in case of unknown `force replacement`.
   container_definitions = (jsonencode(
-    [for s in var.services :
-      merge(
-        ({
-          for k, v in s :
-          k => v
-          if v != null
-        }),
-        {
+    concat(
+      [for service in var.core_services :
+        merge(
+          ({
+            for key, value in service :
+            key => value
+            if value != null
+          }),
+          {
+            name  = service.name
+            image = "${var.repository_prefix}-${service.name}:${var.tag}"
 
-          name  = s.name
-          image = "${var.repository_prefix}-${s.name}:${var.tag}"
-
-          "repositoryCredentials" = {
-            "credentialsParameter" : "${var.ssm_docker}"
-          }
-
-          cpu               = tonumber(s.cpu)
-          memoryReservation = tonumber(s.mem)
-          essential         = tobool(s.essential)
-
-          requires_compatibilities = ["FARGATE"]
-
-          linuxParameters = {
-            initProcessEnabled = true
-          }
-
-          portMappings = [for p in s.ports :
-            {
-              containerPort = tonumber(p)
-              hostPort      = tonumber(p)
-              protocol      = "tcp"
+            "repositoryCredentials" = {
+              "credentialsParameter" : "${var.ssm_docker}"
             }
-          ]
 
-          environment = flatten([s.environment,
-            {
-              "name" : "ES_HOST",
-              "value" : var.es_host,
-            },
-            {
-              "name" : "ES_USERNAME",
-              "value" : "elastic",
-            },
-            {
-              "name" : "ES_PASSWORD",
-              "value" : var.es_password,
-            },
-            {
-              "name" : "APISERVICE_SECRET",
-              "value" : random_uuid.api_secret.result,
-            },
-            {
-              name  = "PRIVATE_KEY",
-              value = base64encode(tls_private_key.jwt.private_key_pem),
-            },
-            {
-              name  = "PUBLIC_KEY",
-              value = base64encode(tls_private_key.jwt.public_key_pem),
-            },
-            {
-              "name" : "PRIVATE_BUCKET", # This is where all the private files will be stored.
-              "value" : var.private_bucket,
-            },
-            {
-              "name" : "REDIS_URL",
-              "value" : "redis://${var.redis_addr}:6379",
-            },
-            {
-              "name" : "APISERVICE_DATABASE_CONNECTION",
-              "value" : "postgresql://keycloak:${var.keycloak_database_password}@${var.db_addr}:5432/secoda",
-            },
-            {
-              "name" : "AWS_ACCOUNT_ID",
-              "value" : data.aws_caller_identity.current.account_id,
-            },
-            var.add_environment_vars,
-          ])
+            cpu               = tonumber(service.cpu)
+            memoryReservation = tonumber(service.mem)
+            essential         = tobool(service.essential)
 
-          command = s.command
+            requires_compatibilities = ["FARGATE"]
 
-          dependsOn = s.dependsOn
-
-          healthCheck = s.healthCheck
-
-          mountPoints = s.mountPoints != null ? s.mountPoints : []
-
-          volumesFrom = []
-
-          ulimits = [
-            {
-              "name" : "core"
-              "softLimit" : 0
-              "hardLimit" : 0
+            linuxParameters = {
+              initProcessEnabled = true
             }
-          ]
 
-          logConfiguration = {
-            logDriver = "awslogs"
-            options = {
-              "awslogs-group"         = local.awslogs_group
-              "awslogs-region"        = var.aws_region
-              "awslogs-stream-prefix" = "${s.name}-logs"
+            portMappings = [for port in service.ports :
+              {
+                containerPort = tonumber(port)
+                hostPort      = tonumber(port)
+                protocol      = "tcp"
+              }
+            ]
+
+            environment = flatten([service.environment,
+              {
+                "name" : "ES_HOST",
+                "value" : var.es_host,
+              },
+              {
+                "name" : "ES_USERNAME",
+                "value" : "elastic",
+              },
+              {
+                "name" : "ES_PASSWORD",
+                "value" : var.es_password,
+              },
+              {
+                "name" : "APISERVICE_SECRET",
+                "value" : random_uuid.api_secret.result,
+              },
+              {
+                name  = "PRIVATE_KEY",
+                value = base64encode(tls_private_key.jwt.private_key_pem),
+              },
+              {
+                name  = "PUBLIC_KEY",
+                value = base64encode(tls_private_key.jwt.public_key_pem),
+              },
+              {
+                "name" : "PRIVATE_BUCKET", # This is where all the private files will be stored.
+                "value" : var.private_bucket,
+              },
+              {
+                "name" : "REDIS_URL",
+                "value" : "redis://${var.redis_addr}:6379",
+              },
+              {
+                "name" : "APISERVICE_DATABASE_CONNECTION",
+                "value" : "postgresql://keycloak:${var.keycloak_database_password}@${var.db_addr}:5432/secoda",
+              },
+              {
+                "name" : "AWS_ACCOUNT_ID",
+                "value" : data.aws_caller_identity.current.account_id,
+              },
+              var.add_environment_vars,
+            ])
+
+            command = service.command
+
+            dependsOn = service.dependsOn
+
+            healthCheck = service.healthCheck
+
+            mountPoints = service.mountPoints != null ? service.mountPoints : []
+
+            volumesFrom = []
+
+            ulimits = [
+              {
+                "name" : "core"
+                "softLimit" : 0
+                "hardLimit" : 0
+              }
+            ]
+
+            logConfiguration = {
+              logDriver = "awslogs"
+              options = {
+                "awslogs-group"         = local.awslogs_group
+                "awslogs-region"        = var.aws_region
+                "awslogs-stream-prefix" = "${service.name}-logs"
+              }
             }
           }
-      })
-    ]
+        )
+      ],
+      var.custom_services
+    )
   ))
 
   lifecycle {

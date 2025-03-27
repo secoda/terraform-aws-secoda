@@ -11,7 +11,7 @@ locals {
   # Configures two services:
   # 1. API service (75% of resources)
   # 2. Frontend service (25% of resources)
-  services = coalesce(var.services, tolist([
+  core_services = [
     {
       name        = "api"
       mem         = floor(3 * var.memory / 4)  # Allocates 75% of total memory
@@ -59,7 +59,7 @@ locals {
       }
       mountPoints = null
     }
-  ]))
+  ]
 }
 
 ################################################################################
@@ -122,7 +122,8 @@ module "ecs" {
   aws_region      = var.aws_region
   associate_alb   = true
   aws_ecs_cluster = aws_ecs_cluster.main
-  services        = local.services
+  core_services   = local.core_services
+  custom_services = var.custom_services
 
   # Network configurations
   ecs_vpc_id          = var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id

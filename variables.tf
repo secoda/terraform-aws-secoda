@@ -245,20 +245,20 @@ variable "tag" {
   type    = string
 }
 
-variable "services" {
+variable "custom_services" {
   type = list(object({
     name      = string
     mem       = number
     cpu       = number
     ports     = list(number)
     essential = bool
+
     environment = list(object({
       name  = string
       value = string
     }))
 
     command = list(string)
-
     dependsOn = list(object({
       containerName = string
       condition     = string
@@ -277,6 +277,5 @@ variable "services" {
       containerPath = string
     }))
   }))
-
-  default = null
+  default = []
 }

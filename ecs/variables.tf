@@ -82,6 +82,58 @@ variable "aws_ecs_cluster" {
   })
 }
 
+variable "custom_services" {
+  type = list(object({
+    name                   = string
+    image                  = string
+    cpu                    = optional(number)
+    memory                 = optional(number)
+    essential             = optional(bool)
+    entryPoint            = optional(list(string))
+    command               = optional(list(string))
+    workingDirectory      = optional(string)
+    environment           = optional(list(object({
+      name  = string
+      value = string
+    })))
+    environmentFiles      = optional(list(object({
+      value = string
+      type  = string
+    })))
+    secrets              = optional(list(object({
+      name      = string
+      valueFrom = string
+    })))
+    mountPoints          = optional(list(object({
+      sourceVolume  = string
+      containerPath = string
+      readOnly      = optional(bool)
+    })))
+    volumesFrom         = optional(list(object({
+      sourceContainer = string
+      readOnly        = optional(bool)
+    })))
+    portMappings        = optional(list(object({
+      containerPort = number
+      hostPort      = optional(number)
+      protocol      = optional(string)
+    })))
+    healthCheck         = optional(object({
+      command     = list(string)
+      interval    = optional(number)
+      timeout     = optional(number)
+      retries     = optional(number)
+      startPeriod = optional(number)
+    }))
+    logConfiguration    = optional(object({
+      logDriver = string
+      options   = map(string)
+    }))
+  }))
+  default = []
+  description = "List of custom container definitions that conform to AWS ECS container definition schema"
+}
+
 variable "add_environment_vars" {
   type = list(object({
     name  = string
@@ -99,7 +151,7 @@ variable "repository_prefix" {
   default = "secoda/on-premise"
 }
 
-variable "services" {
+variable "core_services" {
   type = list(object({
     name      = string
     mem       = number
