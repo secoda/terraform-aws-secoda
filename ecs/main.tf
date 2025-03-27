@@ -434,7 +434,7 @@ resource "aws_ecs_task_definition" "main" {
   requires_compatibilities = ["FARGATE"]
 
   runtime_platform {
-    cpu_architecture        = var.cpu_architecture
+    cpu_architecture        = var.total_cpu_architecture
     operating_system_family = "LINUX"
   }
 
@@ -442,8 +442,8 @@ resource "aws_ecs_task_definition" "main" {
     size_in_gib = 100
   }
 
-  cpu    = var.cpu
-  memory = var.memory
+  cpu    = var.total_cpu
+  memory = var.total_memory
 
   # Use the `nonsensitive()` operator to view the diff in case of unknown `force replacement`.
   container_definitions = (jsonencode(
@@ -463,8 +463,8 @@ resource "aws_ecs_task_definition" "main" {
               "credentialsParameter" : "${var.ssm_docker}"
             }
 
-            cpu               = tonumber(service.cpu)
-            memoryReservation = tonumber(service.mem)
+            cpu               = ceil(floor((var.total_cpu - sum([for s in var.custom_services : try(s.cpu, 0)])) * service.preferred_cpu_percentage / 100) / 128) * 128
+            memoryReservation = floor((var.total_memory - sum([for s in var.custom_services : try(s.memoryReservation, 0)])) * service.preferred_memory_percentage / 100)
             essential         = tobool(service.essential)
 
             requires_compatibilities = ["FARGATE"]

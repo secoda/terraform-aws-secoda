@@ -27,8 +27,8 @@ module "ecs" {
   # Basic configuration
   repository_prefix = var.repository_prefix
   cpu_architecture  = var.cpu_architecture
-  cpu               = var.cpu
-  memory            = var.memory
+  total_cpu         = var.cpu
+  total_memory      = var.memory
   tag               = var.tag
   name              = var.name
   internal          = var.internal

@@ -241,11 +241,11 @@ variable "add_environment_vars" {
 variable "core_services" {
   description = "Configuration for core services (API and Frontend) running in ECS tasks. Defines resource allocation, health checks, and dependencies"
   type = list(object({
-    name      = string
-    mem       = number
-    cpu       = number
-    ports     = list(number)
-    essential = bool
+    name                        = string
+    preferred_memory_percentage = number
+    preferred_cpu_percentage    = number
+    ports                       = list(number)
+    essential                   = bool
     environment = list(object({
       name  = string
       value = string
@@ -269,14 +269,14 @@ variable "core_services" {
   }))
   default = [
     {
-      name        = "api"
-      mem         = floor(3 * var.memory / 4) # Allocates 75% of total memory
-      cpu         = floor(3 * var.cpu / 4)    # Allocates 75% of total CPU
-      ports       = [5007]
-      essential   = true
-      environment = []
-      command     = null
-      dependsOn   = []
+      name                        = "api"
+      preferred_memory_percentage = 75
+      preferred_cpu_percentage    = 75
+      ports                       = [5007]
+      essential                   = true
+      environment                 = []
+      command                     = null
+      dependsOn                   = []
       healthCheck = {
         "retries" : 3,
         "command" : [
@@ -290,13 +290,13 @@ variable "core_services" {
       mountPoints = null
     },
     {
-      name        = "frontend"
-      mem         = floor(1 * var.memory / 4) # Allocates 25% of total memory
-      cpu         = floor(1 * var.cpu / 4)    # Allocates 25% of total CPU
-      ports       = [443]
-      essential   = true
-      environment = []
-      command     = null
+      name                        = "frontend"
+      preferred_memory_percentage = 25
+      preferred_cpu_percentage    = 25
+      ports                       = [443]
+      essential                   = true
+      environment                 = []
+      command                     = null
       dependsOn = [
         {
           "containerName" = "api"
