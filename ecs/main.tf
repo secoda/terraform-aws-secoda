@@ -330,6 +330,14 @@ data "aws_iam_policy_document" "task_role_ecs_exec" {
     resources = var.s3_resources
   }
 
+  dynamic "statement" {
+    for_each = { for v in var.ecs_task_iam_statement : v.sid[0] => v if v.actions[0] != "" }
+    content {
+      actions   = statement.value.actions
+      resources = statement.value.resources
+    }
+  }
+
   statement {
     sid = "AllowRoleAssumption"
 
@@ -431,14 +439,6 @@ resource "aws_ecs_service" "main" {
 # Task Definition (ECS)
 ################################################################################
 
-resource "random_uuid" "keycloak_secret" {}
-resource "random_uuid" "api_secret" {}
-
-resource "tls_private_key" "jwt" {
-  algorithm = "RSA"
-  rsa_bits  = 2048
-}
-
 resource "aws_ecs_task_definition" "main" {
   family             = var.name
   network_mode       = "awsvpc"
@@ -510,15 +510,15 @@ resource "aws_ecs_task_definition" "main" {
               },
               {
                 "name" : "APISERVICE_SECRET",
-                "value" : random_uuid.api_secret.result,
+                "value" : var.api_secret,
               },
               {
                 name  = "PRIVATE_KEY",
-                value = base64encode(tls_private_key.jwt.private_key_pem),
+                value = var.private_key
               },
               {
                 name  = "PUBLIC_KEY",
-                value = base64encode(tls_private_key.jwt.public_key_pem),
+                value = var.public_key
               },
               {
                 "name" : "PRIVATE_BUCKET", # This is where all the private files will be stored.

@@ -388,3 +388,17 @@ variable "create_service_linked_role" {
   default     = true
   description = "Create a service linked role for OpenSearch"
 }
+
+################################################################################
+# Batch
+################################################################################
+variable "batch_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "extraction_vcpu" {
+  type    = number
+  default = 32
+}
+
