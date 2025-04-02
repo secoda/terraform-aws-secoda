@@ -162,14 +162,17 @@ variable "custom_services" {
 
 variable "api_secret" {
   type = string
+  default = ""
 }
 
 variable "private_key" {
   type = string
+  default = ""
 }
 
 variable "public_key" {
   type = string
+  default = ""
 }
 
 variable "add_environment_vars" {

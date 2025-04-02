@@ -439,6 +439,13 @@ resource "aws_ecs_service" "main" {
 # Task Definition (ECS)
 ################################################################################
 
+resource "random_uuid" "api_secret" {}
+
+resource "tls_private_key" "jwt" {
+  algorithm = "RSA"
+  rsa_bits  = 2048
+}
+
 resource "aws_ecs_task_definition" "main" {
   family             = var.name
   network_mode       = "awsvpc"
@@ -510,15 +517,15 @@ resource "aws_ecs_task_definition" "main" {
               },
               {
                 "name" : "APISERVICE_SECRET",
-                "value" : var.api_secret,
+                "value" : var.api_secret == "" ? random_uuid.api_secret.result : var.api_secret
               },
               {
                 name  = "PRIVATE_KEY",
-                value = var.private_key
+                value = var.private_key == "" ? base64encode(tls_private_key.jwt.private_key_pem) : var.private_key 
               },
               {
                 name  = "PUBLIC_KEY",
-                value = var.public_key
+                value = var.public_key== "" ? base64encode(tls_private_key.jwt.public_key_pem) : var.public_key
               },
               {
                 "name" : "PRIVATE_BUCKET", # This is where all the private files will be stored.

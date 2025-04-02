@@ -89,9 +89,9 @@ module "ecs" {
   ecs_sg_id           = aws_security_group.ecs_sg.id
 
   # generated secrets
-  api_secret  = random_uuid.api_secret.result
-  private_key = base64encode(tls_private_key.jwt.private_key_pem)
-  public_key  = base64encode(tls_private_key.jwt.public_key_pem)
+  api_secret  = var.batch_enabled ? random_uuid.api_secret.result : ""
+  private_key = var.batch_enabled ? base64encode(tls_private_key.jwt.private_key_pem) : ""
+  public_key  = var.batch_enabled ? base64encode(tls_private_key.jwt.public_key_pem) : ""
 
   add_environment_vars = flatten([var.add_environment_vars, local.ecs_batch_vars["batch_environment_vars"], local.ecs_batch_secret])
 
