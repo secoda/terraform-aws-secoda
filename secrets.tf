@@ -13,8 +13,6 @@ module "secrets-manager" {
   }
 }
 
-resource "random_uuid" "api_secret" {}
-
 resource "random_uuid" "batch_encryption_token" {}
 
 resource "tls_private_key" "jwt" {

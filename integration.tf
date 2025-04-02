@@ -34,10 +34,6 @@ module "integrations" {
       "value" : base64encode(tls_private_key.jwt.private_key_pem)
     },
     {
-      "name" : "APISERVICE_SECRET",
-      "value" : random_uuid.api_secret.result
-    },
-    {
       "name" : "REDIS_URL",
       "value" : "redis://${module.redis.endpoint}:6379"
     },

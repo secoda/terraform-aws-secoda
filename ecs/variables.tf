@@ -160,11 +160,6 @@ variable "custom_services" {
   description = "List of custom container definitions that conform to AWS ECS container definition schema"
 }
 
-variable "api_secret" {
-  type = string
-  default = ""
-}
-
 variable "private_key" {
   type = string
   default = ""

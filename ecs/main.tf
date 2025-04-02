@@ -439,8 +439,6 @@ resource "aws_ecs_service" "main" {
 # Task Definition (ECS)
 ################################################################################
 
-resource "random_uuid" "api_secret" {}
-
 resource "tls_private_key" "jwt" {
   algorithm = "RSA"
   rsa_bits  = 2048
@@ -514,10 +512,6 @@ resource "aws_ecs_task_definition" "main" {
               {
                 "name" : "ES_PASSWORD",
                 "value" : var.es_password,
-              },
-              {
-                "name" : "APISERVICE_SECRET",
-                "value" : var.api_secret == "" ? random_uuid.api_secret.result : var.api_secret
               },
               {
                 name  = "PRIVATE_KEY",
