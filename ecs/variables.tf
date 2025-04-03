@@ -160,6 +160,16 @@ variable "custom_services" {
   description = "List of custom container definitions that conform to AWS ECS container definition schema"
 }
 
+variable "private_key" {
+  type = string
+  default = ""
+}
+
+variable "public_key" {
+  type = string
+  default = ""
+}
+
 variable "add_environment_vars" {
   type = list(object({
     name  = string
@@ -168,6 +178,17 @@ variable "add_environment_vars" {
   default = []
 }
 
+variable "ecs_task_iam_statement" {
+  description = "Add simple statements to task IAM Role"
+  default = [
+    {
+      sid       = [""]
+      actions   = [""]
+      resources = [""]
+    }
+  ]
+  type = list(map(any))
+}
 variable "tag" {
   type = string
 }
@@ -442,3 +463,4 @@ variable "health_check_grace_period_seconds" {
   default     = 30
   type        = number
 }
+

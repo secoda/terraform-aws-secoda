@@ -12,3 +12,10 @@ module "secrets-manager" {
     },
   }
 }
+
+resource "random_uuid" "batch_encryption_token" {}
+
+resource "tls_private_key" "jwt" {
+  algorithm = "RSA"
+  rsa_bits  = 2048
+}
