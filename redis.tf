@@ -23,15 +23,6 @@ module "redis" {
   vpc_id             = var.vpc_id == null ? module.vpc[0].vpc_id : var.vpc_id
 
   allowed_security_group_ids = [aws_security_group.ecs_sg.id]
-  additional_security_group_rules = [
-    {
-      type              = "ingress"
-      from_port         = 6379
-      to_port           = 6379
-      protocol          = "tcp"
-      cidr_blocks       = [var.vpc_id == null ? module.vpc[0].vpc_cidr_block : data.aws_vpc.override[0].cidr_block]
-    }
-  ]
   subnets                    = var.vpc_id == null ? module.vpc[0].database_subnets : var.database_subnets
   cluster_size               = 1
   instance_type              = "cache.t4g.medium"
@@ -45,4 +36,3 @@ module "redis" {
   transit_encryption_enabled = false
   context                    = module.this.context
 }
-
