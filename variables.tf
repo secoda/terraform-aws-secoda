@@ -228,7 +228,7 @@ variable "repository_prefix" {
 }
 
 variable "tag" {
-  default = "2025.2.7"
+  default = "2025.2.8"
   type    = string
 }
 
