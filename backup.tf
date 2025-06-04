@@ -11,7 +11,9 @@ module "backup" {
       schedule          = "cron(0 5 * * ? *)"
       start_window      = 120
       completion_window = 720
-      delete_after      = 30
+      lifecycle = {
+        delete_after = 30
+      }
     }
   ]
 }
