@@ -23,6 +23,11 @@ output "vpc_id" {
   value       = length(module.vpc) > 0 ? module.vpc[0].vpc_id : ""
 }
 
+output "azs" {
+  description = "Availability zones used for Secoda"
+  value       = length(module.vpc) > 0 ? module.vpc[0].azs : []
+}
+
 output "public_subnet_ids" {
   description = "Subnet IDs used for Secoda"
   value       = length(module.vpc) > 0 ? module.vpc[0].public_subnets : []
@@ -32,3 +37,14 @@ output "private_subnet_ids" {
   description = "Subnet IDs used for Secoda"
   value       = length(module.vpc) > 0 ? module.vpc[0].private_subnets : []
 }
+
+output "private_route_table_ids" {
+  description = "Private route table IDs used for Secoda"
+  value       = length(module.vpc) > 0 ? module.vpc[0].private_route_table_ids : []
+}
+
+output "public_route_table_ids" {
+  description = "Public route table IDs used for Secoda"
+  value       = length(module.vpc) > 0 ? module.vpc[0].public_route_table_ids : []
+}
+
