@@ -223,6 +223,7 @@ resource "aws_batch_job_definition" "extraction_run" {
     }
 
     executionRoleArn = aws_iam_role.extraction_ecs_execution_role.arn
+    enableExecuteCommand = true
   })
 }
 
