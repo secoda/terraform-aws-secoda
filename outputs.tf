@@ -8,7 +8,7 @@ output "aws_lb_zone_id" {
   value       = module.ecs.aws_lb_zone_id
 }
 
-output "integration_batch_sg_id" {
+output "integration_sg_id" {
   description = "Integration batch security group"
   value       = module.integrations[0].integration_sg_id
 }
