@@ -161,12 +161,12 @@ variable "custom_services" {
 }
 
 variable "private_key" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "public_key" {
-  type = string
+  type    = string
   default = ""
 }
 

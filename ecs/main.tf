@@ -515,11 +515,11 @@ resource "aws_ecs_task_definition" "main" {
               },
               {
                 name  = "PRIVATE_KEY",
-                value = var.private_key == "" ? base64encode(tls_private_key.jwt.private_key_pem) : var.private_key 
+                value = var.private_key == "" ? base64encode(tls_private_key.jwt.private_key_pem) : var.private_key
               },
               {
                 name  = "PUBLIC_KEY",
-                value = var.public_key== "" ? base64encode(tls_private_key.jwt.public_key_pem) : var.public_key
+                value = var.public_key == "" ? base64encode(tls_private_key.jwt.public_key_pem) : var.public_key
               },
               {
                 "name" : "PRIVATE_BUCKET", # This is where all the private files will be stored.

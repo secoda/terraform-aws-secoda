@@ -196,7 +196,7 @@ resource "aws_batch_job_definition" "integration_run" {
       }
     }
 
-    executionRoleArn = aws_iam_role.integration_ecs_execution_role.arn
+    executionRoleArn     = aws_iam_role.integration_ecs_execution_role.arn
     enableExecuteCommand = true
   })
 }
