@@ -22,7 +22,7 @@ data "aws_ami" "amd64" {
   most_recent = true
   filter {
     name   = "name"
-    values = ["ubuntu/images/*23.04-amd64-server-*"]
+    values = ["ubuntu/images/*24.10-amd64-server-*"]
   }
   filter {
     name   = "virtualization-type"
