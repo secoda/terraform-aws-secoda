@@ -15,6 +15,8 @@ resource "aws_db_instance" "postgres" {
   engine                       = "postgres"
   engine_version               = var.database_version
   instance_class               = var.rds_instance_type
+  storage_type                 = var.rds_storage_type
+  iops                         = var.rds_iops
   identifier                   = local.name
   db_name                      = "keycloak"
   username                     = "keycloak"
