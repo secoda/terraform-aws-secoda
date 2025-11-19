@@ -34,9 +34,20 @@ variable "rds_allocated_storage" {
   default     = 38
 }
 
+variable "rds_iops" {
+  description = "provisioned iops"
+  type        = number
+  default     = null
+}
+
 variable "rds_instance_type" {
   type    = string
   default = "db.t4g.small"
+}
+
+variable "rds_storage_type" {
+  type    = string
+  default = null
 }
 
 variable "database_version" {
