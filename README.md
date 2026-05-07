@@ -4,7 +4,7 @@
 ```hcl
 module "secoda" {
   source      = "secoda/secoda/aws"
-  version     = "2026.2.0"
+  version     = "2026.2.1"
   name        = "secoda"
   environment = "production"
   aws_region  = "us-east-1"
