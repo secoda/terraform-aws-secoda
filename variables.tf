@@ -73,6 +73,12 @@ variable "es_instance_type" {
   default = "t3.medium.search"
 }
 
+variable "redis_instance_type" {
+  description = "ElastiCache node type for the queue. Use cache.t4g.medium when memory peaks above about 10% on cache.t4g.small."
+  type        = string
+  default     = "cache.t4g.small"
+}
+
 ################################################################################
 # Proxy Configuration
 ################################################################################
