@@ -50,3 +50,22 @@ resource "aws_eip" "nat" {
   count  = var.vpc_id == null ? 1 : 0
   domain = "vpc"
 }
+
+# Gateway endpoints are free. S3 traffic from private subnets then skips NAT data processing.
+resource "aws_vpc_endpoint" "s3" {
+  count = var.vpc_id == null ? 1 : 0
+
+  vpc_id            = module.vpc[0].vpc_id
+  service_name      = "com.amazonaws.${var.aws_region}.s3"
+  vpc_endpoint_type = "Gateway"
+  route_table_ids = distinct(concat(
+    module.vpc[0].private_route_table_ids,
+    module.vpc[0].database_route_table_ids,
+  ))
+
+  tags = {
+    Name        = "${var.name}-s3"
+    Environment = var.environment
+    Automation  = "Terraform"
+  }
+}
