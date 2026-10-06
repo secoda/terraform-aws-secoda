@@ -153,8 +153,9 @@ resource "aws_iam_role_policy_attachment" "integration_ecs_job_role_policy2" {
 
 
 resource "aws_batch_job_definition" "integration_run" {
-  name = "int_batch_job_definition_${var.environment}"
-  type = "container"
+  name           = "int_batch_job_definition_${var.environment}"
+  type           = "container"
+  propagate_tags = true
 
   platform_capabilities = [
     "FARGATE",
