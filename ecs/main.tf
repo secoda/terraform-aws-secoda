@@ -403,6 +403,7 @@ resource "aws_ecs_service" "main" {
   cluster = var.aws_ecs_cluster.arn
 
   launch_type            = local.ecs_service_launch_type
+  propagate_tags         = "SERVICE"
   enable_execute_command = true
 
   # Use latest active revision

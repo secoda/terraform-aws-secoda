@@ -174,8 +174,9 @@ resource "aws_iam_role_policy_attachment" "extraction_ecs_job_role_policy2" {
 
 
 resource "aws_batch_job_definition" "extraction_run" {
-  name = "ext_batch_job_definition_${var.environment}"
-  type = "container"
+  name           = "ext_batch_job_definition_${var.environment}"
+  type           = "container"
+  propagate_tags = true
 
   platform_capabilities = [
     "FARGATE",
