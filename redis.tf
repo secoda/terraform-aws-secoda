@@ -34,7 +34,7 @@ module "redis" {
   ]
   subnets                    = var.vpc_id == null ? module.vpc[0].database_subnets : var.database_subnets
   cluster_size               = 1
-  instance_type              = "cache.t4g.medium"
+  instance_type              = var.redis_instance_type
   apply_immediately          = true
   automatic_failover_enabled = false
   engine_version             = "6.x"
