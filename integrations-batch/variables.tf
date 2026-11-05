@@ -44,7 +44,7 @@ variable "cpu_architecture" {
 
 variable "logs_cloudwatch_retention" {
   description = "Number of days you want to retain log events in the log group."
-  default     = 365
+  default     = 30
   type        = number
 }
 

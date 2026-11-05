@@ -324,7 +324,7 @@ variable "cloudwatch_alarm_mem_threshold" {
 
 variable "logs_cloudwatch_retention" {
   description = "Number of days you want to retain log events in the log group."
-  default     = 365
+  default     = 30
   type        = number
 }
 
