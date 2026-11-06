@@ -26,6 +26,7 @@ resource "aws_db_instance" "postgres" {
   delete_automated_backups     = false
   backup_window                = "10:00-11:00"
   backup_retention_period      = 21
+  copy_tags_to_snapshot        = true
   db_subnet_group_name         = var.database_subnet_group_name != null ? var.database_subnet_group_name : var.name
   vpc_security_group_ids       = concat([aws_security_group.keycloak-security-group.id], (var.proxy_instance || var.enable_cidr_ingress) ? [aws_security_group.cidr_rds_security_group[0].id] : [])
   storage_encrypted            = true

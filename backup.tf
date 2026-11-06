@@ -1,3 +1,5 @@
+data "aws_default_tags" "cost_allocation" {}
+
 module "backup" {
   source           = "cloudposse/backup/aws"
   version          = "1.0.2"
@@ -5,6 +7,10 @@ module "backup" {
   name             = var.name
   backup_resources = [aws_db_instance.postgres.arn]
   not_resources    = []
+
+  # The module uses these tags for recovery points, which do not inherit provider defaults.
+  tags = data.aws_default_tags.cost_allocation.tags
+
   rules = [
     {
       name              = "secoda-db-daily"
